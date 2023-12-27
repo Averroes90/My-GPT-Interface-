@@ -47,13 +47,22 @@ The project includes working with and combining multiple AI models, API, and pro
 
 1. **Clone the Repository**
 
+2. **Setting Up Environment Variables**
+  Before running the project, you need to set up environment variables:
+- Create a `.env` file in the root of the project.
+- Add the necessary keys and values in the `.env` file:
+  ```
+  OPENAI_API_KEY=your_api_key_here
+  FLASK_ENV=development
+  FLASK_SECRET_KEY=your_flask_secret_key_here
+  ```
 
-2. **Install Frontend Dependencies:**
+3. **Install Frontend Dependencies:**
   ```
   npm install
   ```
 
-3. **Install Backend Dependencies:**
+4. **Install Backend Dependencies:**
 - Ensure you have Python 3 installed.
 - It's recommended to use a virtual environment:
   ```
@@ -65,10 +74,10 @@ The project includes working with and combining multiple AI models, API, and pro
   pip install -r requirements.txt
   ```
 
-4. **Setup the Database:**
+5. **Setup the Database:**
 - The project uses SQLAlchemy with SQLite. 
 
-5. **Running the Project:**
+6. **Running the Project:**
 - To start the frontend development server:
   ```
   npm run webpack
@@ -82,7 +91,7 @@ The project includes working with and combining multiple AI models, API, and pro
   npm start
   ```
 
-6. **Accessing the Application:**
+7. **Accessing the Application:**
 - By default, the frontend will be available at `http://localhost:8080` and the backend at `http://localhost:5001`.
 
 ### Additional Notes
