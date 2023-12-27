@@ -26,7 +26,7 @@ The project is built using a diverse set of technologies, covering both frontend
   - Concurrently
 
 ## AI and Prompt Engineering
-The project includes working with AI models and prompt engineering techniques, such as:
+The project includes working with AI models, API, and prompt engineering techniques, such as:
 - ChatGPT
 - FalconAI
 - Hugging Face tools (e.g., sentiment analysis, passive feedback techniques)
