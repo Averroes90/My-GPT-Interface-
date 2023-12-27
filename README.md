@@ -30,6 +30,7 @@ The project includes working with AI models and prompt engineering techniques, s
 - ChatGPT
 - FalconAI
 - Hugging Face tools (e.g., sentiment analysis, passive feedback techniques)
+- Self prompting and agent based modeling
 
 
 *Note: `__pycache__` and `node_modules` directories are not tracked by Git.*
@@ -44,7 +45,7 @@ The project includes working with AI models and prompt engineering techniques, s
 
 ### Setting Up the Project
 
-1. **Clone the Repository:**
+1. **Clone the Repository**
 
 
 2. **Install Frontend Dependencies:**
