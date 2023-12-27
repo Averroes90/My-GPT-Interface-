@@ -48,6 +48,7 @@ The project includes working with and combining multiple AI models, API, and pro
 1. **Clone the Repository**
 
 2. **Setting Up Environment Variables**
+
   Before running the project, you need to set up environment variables:
 - Create a `.env` file in the root of the project.
 - Add the necessary keys and values in the `.env` file:
