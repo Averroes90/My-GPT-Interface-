@@ -31,7 +31,7 @@ The project includes working with and combining multiple AI models, API, and pro
 - FalconAI
 - Hugging Face tools (e.g., sentiment analysis, passive feedback techniques)
 - Self prompting and agent based modeling
--Token Management
+- Token Management
 
 
 *Note: `__pycache__` and `node_modules` directories are not tracked by Git.*
