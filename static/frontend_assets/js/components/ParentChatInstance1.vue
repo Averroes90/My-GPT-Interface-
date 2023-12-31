@@ -97,9 +97,9 @@ async function sendPrompt() {
         return; // Stop the function here if there was an error
     }
     // Your hardcoded values
-    const modelName = "gpt-3.5-turbo";  
-    const tokenLimit = 4096;
-    const tokenReserve = 0.10;
+    const modelName = "gpt-4-1106-preview";  
+    const tokenLimit = 128000;
+    const tokenReserve = 0.015;
     const payload = {
         userPrompt: promptContent.value,
         newConversationCheckbox: newConversationCheckboxState.value,

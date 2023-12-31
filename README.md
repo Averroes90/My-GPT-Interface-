@@ -58,6 +58,7 @@ The project includes working with and combining multiple AI models, API, and pro
   FLASK_ENV=development
   FLASK_SECRET_KEY=your_flask_secret_key_here
   ```
+  *note the model is set up to work with gpt-4-turbo, you will need to bill $5 to your OpenAI account to get it working*
 
 3. **Install Frontend Dependencies:**
   ```
@@ -92,6 +93,13 @@ The project includes working with and combining multiple AI models, API, and pro
   ```
   npm start
   ```
+- When making changes to the back end:
+  use
+  ```
+  npm run build 
+  ```
+  to deploy changes to the webpack bundler
+       
 
 7. **Accessing the Application:**
 - By default, the frontend will be available at `http://localhost:8080` and the backend at `http://localhost:5001`.
