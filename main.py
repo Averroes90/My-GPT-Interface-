@@ -71,7 +71,8 @@ def handle_prompt():
     new_conversation_checkbox = data.get('newConversationCheckbox') 
     token_limit = data['tokenLimit'] #total token limits for the model 
     token_reserve = data['tokenReserve'] #tokens reserved for new user's prompt in %
-    reserved_tokens = math.floor(token_limit * token_reserve)
+    #reserved_tokens = math.floor(token_limit * token_reserve)
+    reserved_tokens = token_reserve
     message = []
 
     if new_conversation_checkbox:

@@ -99,7 +99,7 @@ async function sendPrompt() {
     // Your hardcoded values
     const modelName = "gpt-4-1106-preview";  
     const tokenLimit = 128000;
-    const tokenReserve = 0.015;
+    const tokenReserve = 4096;
     const payload = {
         userPrompt: promptContent.value,
         newConversationCheckbox: newConversationCheckboxState.value,
