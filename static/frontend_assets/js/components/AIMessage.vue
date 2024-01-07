@@ -1,18 +1,48 @@
 <template>
-    <div class="ai-message">
-      AI: 
-      <span v-for="(segment, i) in segments" :key="i">
-        <span v-if="segment.type === 'text'">{{ segment.value }}</span>
-        <CodeHighlight v-else :code="segment.value" />
-      </span>
-    </div>
-  </template>
-  
-  <script setup>
-  import CodeHighlight from './CodeHighlight.vue';
-  
-  // Props
-  const props = defineProps({
-    segments: Array
+  <v-col class="ai-message " :cols="deletionMode ? '11' : '12'">
+    AI:
+    <span v-for="(segment, index) in segments" :key="index">
+      <template v-if="segment.type === 'text'">
+        {{ segment.value }}
+      </template>
+      <template v-else>
+        <pre class="code-container">
+          <code ref="codeBlocks">{{ segment.value }}</code>
+        </pre>
+      </template>
+    </span>
+  </v-col>
+</template>
+
+<script setup>
+import { computed, onUpdated, ref, nextTick, onMounted } from 'vue';
+import { useStore } from 'vuex';
+import hljs from 'highlight.js';
+import 'highlight.js/styles/github-dark.css';
+
+const props = defineProps({ segments: Array });
+const codeBlocks = ref([]);
+const store = useStore();
+const deletionMode = computed(() => store.state.deletionMode);
+
+function highlightCodeBlocks() {
+  nextTick(() => {
+    if (codeBlocks.value) {
+      codeBlocks.value.forEach((block) => {
+        hljs.highlightElement(block);
+      });
+    }
   });
-  </script>
+}
+onMounted(() => {
+  highlightCodeBlocks();
+});
+onUpdated(() => {
+  highlightCodeBlocks();
+});
+</script>
+<style scoped>
+.ai-message {
+  color: #85c1e9;  /* This is a light blue shade which complements the existing dark theme */
+}
+</style>
