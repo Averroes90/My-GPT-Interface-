@@ -7,7 +7,7 @@
       </template>
       <template v-else>
         <pre class="code-container">
-          <code ref="codeBlocks">{{ segment.value }}</code>
+          <code v-highlight>{{ segment.value }}</code>
         </pre>
       </template>
     </span>
@@ -17,8 +17,8 @@
 <script setup>
 import { computed, onUpdated, ref, nextTick, onMounted } from 'vue';
 import { useStore } from 'vuex';
-import hljs from 'highlight.js';
-import 'highlight.js/styles/github-dark.css';
+// import hljs from 'highlight.js';
+// import 'highlight.js/styles/github-dark.css';
 
 const props = defineProps({ segments: Array });
 const codeBlocks = ref([]);

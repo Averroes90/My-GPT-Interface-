@@ -3,7 +3,7 @@ import { createApp } from 'vue';
 import { createStore } from 'vuex';
 import App from './components/App.vue'; 
 import Store from './store'; // import your Vuex Store
-
+import highlightPlugin from './plugins/highlightPlugin';
 
 // Vuetify
 import 'vuetify/dist/vuetify.min.css';
@@ -36,7 +36,7 @@ const app = createApp(App);
 //app.config.globalProperties.$delimiters = ['[[', ']]'];
 app.use(vuetify);
 app.use(store);  // Use Vuex store
-
+app.use(highlightPlugin);
 
 
 
