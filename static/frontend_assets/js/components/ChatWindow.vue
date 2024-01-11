@@ -11,7 +11,7 @@
             <!-- User Message -->
             <UserMessage :message="interaction.prompt" />
             <!-- AI Message -->
-            <AIMessage :segments="interaction.segments" />
+            <AIMessage :response="interaction.response" />
           </v-row>
         </v-col>
       </v-row>

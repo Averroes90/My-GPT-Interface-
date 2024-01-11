@@ -8,6 +8,7 @@ module.exports = {
     vue: './static/frontend_assets/js/vueApp.js'
   },
   mode: 'development',
+  devtool: 'eval-source-map',
   output: {
     path: path.resolve(__dirname, 'static', 'dist'),
     filename: '[name].bundle.js',

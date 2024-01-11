@@ -3,7 +3,7 @@ import { createApp } from 'vue';
 import { createStore } from 'vuex';
 import App from './components/App.vue'; 
 import Store from './store'; // import your Vuex Store
-import highlightPlugin from './plugins/highlightPlugin';
+import markdownItPlugin from './plugins/markdownItPlugin'; // Adjust the path as needed
 
 // Vuetify
 import 'vuetify/dist/vuetify.min.css';
@@ -27,7 +27,8 @@ const vuetify = createVuetify({
   },
   theme: {
     defaultTheme: 'dark',
-  }});
+  }
+});
 
 
 // Create a new Vue app and mount it to an element
@@ -36,8 +37,8 @@ const app = createApp(App);
 //app.config.globalProperties.$delimiters = ['[[', ']]'];
 app.use(vuetify);
 app.use(store);  // Use Vuex store
-app.use(highlightPlugin);
-
+//app.use(highlightPlugin);
+app.use(markdownItPlugin);
 
 
 app.mount('#chatAppVueRoot');
