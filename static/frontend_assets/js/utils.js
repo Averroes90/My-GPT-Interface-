@@ -197,6 +197,7 @@ export function escapeHtml(unsafe) {
 //   return segments;
 // }
 
+
 export function classifyResponse(response) {
   const regex = /```([\s\S]*?)```|([\s\S]+?)(?=```|$)/g;
   const segments = [];
@@ -205,26 +206,17 @@ export function classifyResponse(response) {
   while ((match = regex.exec(response)) !== null) {
     if (match[1]) {
       // Code segment
-      const codeContainer = document.createElement('div');
-      const preElement = document.createElement('pre');
       const codeElement = document.createElement('code');
-      preElement.appendChild(codeElement);
-      console.log(`code element: ${codeElement.outerHTML}`)
-      console.log(`code block: ${match[1]}`)
       codeElement.textContent = match[1];
-      codeContainer.appendChild(preElement);
       hljs.highlightElement(codeElement);
-      console.log(`code container outer html: ${codeContainer.outerHTML}`)
-      console.log(`code container inner html: ${codeContainer.innerHTML}`)
-      segments.push(codeContainer.innerHTML);
-      console.log(`segments: ${segments}`)
+      const detectedLanguage = Array.from(codeElement.classList)
+        .find(className => className.startsWith('language-'))
+        ?.replace('language-', '') ?? '';
+      segments.push(`\`\`\`${detectedLanguage}\n${match[1]}\n\`\`\``);
     } else if (match[2]) {
       // Text segment
-      const textContainer = document.createElement('div');
-      textContainer.textContent = match[2];
-      segments.push(textContainer.innerHTML);
+      segments.push(match[2]);
     }
   }
-
   return segments.join('\n');
 }

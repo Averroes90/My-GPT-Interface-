@@ -1,7 +1,7 @@
 <template>
   <v-col class="user-message" :cols="deletionMode ? '11' : '12'">
     You: 
-    <div v-html="segments"></div>
+    <div v-html="$markdown.render(segments)"></div>
   </v-col>
 </template>
 

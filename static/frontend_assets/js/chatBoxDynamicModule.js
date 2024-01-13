@@ -40,7 +40,6 @@ export const createChatWindowModule = (uniqueId) => ({
   actions: {
     async refreshChatWindow({ state, commit }) {
       const interactions = await fetchInteractions(state.selectedConversationId);
-      console.log(`interactions responses: ${interactions}`)
       commit('setInteractions', interactions);
     },
     async loadChatWindow(context, uniqueId) {
