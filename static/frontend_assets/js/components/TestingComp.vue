@@ -1,27 +1,9 @@
-<template>
-    <v-container>
-      <v-row>
-        <v-col cols="12">
-          <!-- Background Card -->
-          <v-card
-            class="position-relative"
-            elevation="2"
-          >
-            I'm the background card
-          </v-card>
-  
-          <!-- Foreground Card -->
-          <v-card
-            class="position-absolute"
-            elevation="12"
-            style="top: 20px; left: 20px;"
-          >
-            I'm the foreground card
-          </v-card>
-        </v-col>
-      </v-row>
-    </v-container>
-  </template>
+give me back this code ,<pre><code data-highlighted="yes" class="hljs language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">template</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">v-col</span> <span class="hljs-attr">class</span>=<span class="hljs-string">"user-message"</span> <span class="hljs-attr">:cols</span>=<span class="hljs-string">"deletionMode ? '11' : '12'"</span>&gt;</span>
+    You: 
+    <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">v-html</span>=<span class="hljs-string">"processedMessage"</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">v-col</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">template</span>&gt;</span></code></pre>
   
   <style scoped>
   .position-relative {
@@ -32,3 +14,4 @@
     position: absolute;
   }
   </style>
+  
