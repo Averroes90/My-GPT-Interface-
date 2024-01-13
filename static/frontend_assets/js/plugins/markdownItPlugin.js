@@ -1,12 +1,9 @@
 import MarkdownIt from 'markdown-it';
 import hljs from 'highlight.js';
-import 'highlight.js/styles/github-dark.css'; // Import your desired highlight.js theme
+//import 'highlight.js/styles/github-dark.css'; // Import your desired highlight.js theme
 import hljsDefineVue from 'highlightjs-vue';
-
+import 'highlight.js/styles/github-dark.css'
 hljsDefineVue(hljs);
-
-
-
 
 export default {
   install(app) {
@@ -14,17 +11,15 @@ export default {
       linkify: true,
       breaks: true,
       highlight: function (str, lang) {
-        console.log(`Language detected: ${lang}`);
-        console.log(`hljs.getLanguage output:`, hljs.getLanguage(lang));
         if (lang && hljs.getLanguage(lang)) {
-            console.log(`inside if: ${lang}`);  
           try {
-            console.log(`inside try: ${lang}`);
-            return hljs.highlight(str, { language: lang }).value;
+            const highlightedCode = hljs.highlight(str, { language: lang }).value;
+            // Add a div or span with the language name above the code block
+            return `<pre><div class="code-language">${lang}</div><code class="hljs language-${lang}" data-highlighted="yes">${highlightedCode}</code></pre>`;
           } catch (_) {}
         }
-
-        return ''; // use external default escaping
+      
+        return `<pre><code>${str}</code></pre>`; // Default fallback without highlighting
       }
     });
 

@@ -2,7 +2,7 @@ import * as main from './script.js';
 import * as api from './api.js';
 import * as utils from './utils.js';
 import hljs from 'highlight.js';
-import 'highlight.js/styles/github-dark.css'; // or any other style you prefer
+//import 'highlight.js/styles/github-dark.css'; // or any other style you prefer
 
 
 export function setCheckboxState(state, isDatabaseEmpty = false) {

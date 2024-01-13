@@ -42,7 +42,6 @@
 
 import { ref, computed, onMounted, onBeforeMount, watch, defineEmits } from 'vue';
 import { useStore } from 'vuex'; // Import Vuex store
-import ChatboxComponent from './ChatboxComponent.vue';
 import ChatWindow from './ChatWindow.vue'
 import * as api from '../api.js';
 import { createChatWindowModule } from '../chatBoxDynamicModule.js';

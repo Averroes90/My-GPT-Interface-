@@ -14,7 +14,7 @@ export const createChatWindowModule = (uniqueId) => ({
     setInteractions(state, interactions) {
       state.interactions = interactions.map(interaction => ({
         ...interaction,
-        segments: classifyResponse(interaction.response),
+        segments: classifyResponse(interaction.prompt),
       }));
     },
     setSelectedConversationId(state, id) {
@@ -23,7 +23,7 @@ export const createChatWindowModule = (uniqueId) => ({
     addInteraction(state, interaction) {
       const processedInteraction = {
         ...interaction,
-        segments: classifyResponse(interaction.response),
+        segments: classifyResponse(interaction.prompt),
       };
         state.interactions.push(processedInteraction);
     },
@@ -40,8 +40,8 @@ export const createChatWindowModule = (uniqueId) => ({
   actions: {
     async refreshChatWindow({ state, commit }) {
       const interactions = await fetchInteractions(state.selectedConversationId);
+      console.log(`interactions responses: ${interactions}`)
       commit('setInteractions', interactions);
-      //console.log(interactions)
     },
     async loadChatWindow(context, uniqueId) {
       try {
@@ -85,6 +85,7 @@ export const createChatWindowModule = (uniqueId) => ({
           context.commit('setSelectedConversationId', data.conversationId); // Set the selected conversation ID
         }else {
           const transformedData = mapApiResponseToInteraction(data, payload.userPrompt);
+          console.log(`new response: ${transformedData.response}`)
           context.commit('addInteraction', transformedData); // Assuming data contains the interaction you want to add
         }  
 

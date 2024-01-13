@@ -1,5 +1,6 @@
 import * as ui from './ui.js';
 import * as api from './api.js';
+import hljs from 'highlight.js';
 
 export async function deleteSelectedItems(type) {
   const selectedIds = collectSelectedIds(type); // Array to hold selected item IDs
@@ -180,16 +181,50 @@ export function escapeHtml(unsafe) {
 //   return segments;
 // }
 
+// export function classifyResponse(response) {
+//   const regex = /```([\s\S]*?)```|([\s\S]+?)(?=```|$)/g;
+//   const segments = [];
+//   let match;
+//   while ((match = regex.exec(response)) !== null) {
+//     if (match[1]) {
+//       console.log(`classify code: ${match[1]}`)
+//       segments.push({ type: 'code', value: match[1] }); 
+//     } else if (match[2]) {
+//       console.log(`classify text: ${match[0]}`)
+//       segments.push({ type: 'text', value: match[2] });
+//     }
+//   }
+//   return segments;
+// }
+
 export function classifyResponse(response) {
   const regex = /```([\s\S]*?)```|([\s\S]+?)(?=```|$)/g;
   const segments = [];
   let match;
+
   while ((match = regex.exec(response)) !== null) {
     if (match[1]) {
-      segments.push({ type: 'code', value: match[1] }); 
+      // Code segment
+      const codeContainer = document.createElement('div');
+      const preElement = document.createElement('pre');
+      const codeElement = document.createElement('code');
+      preElement.appendChild(codeElement);
+      console.log(`code element: ${codeElement.outerHTML}`)
+      console.log(`code block: ${match[1]}`)
+      codeElement.textContent = match[1];
+      codeContainer.appendChild(preElement);
+      hljs.highlightElement(codeElement);
+      console.log(`code container outer html: ${codeContainer.outerHTML}`)
+      console.log(`code container inner html: ${codeContainer.innerHTML}`)
+      segments.push(codeContainer.innerHTML);
+      console.log(`segments: ${segments}`)
     } else if (match[2]) {
-      segments.push({ type: 'text', value: match[2] });
+      // Text segment
+      const textContainer = document.createElement('div');
+      textContainer.textContent = match[2];
+      segments.push(textContainer.innerHTML);
     }
   }
-  return segments;
+
+  return segments.join('\n');
 }
