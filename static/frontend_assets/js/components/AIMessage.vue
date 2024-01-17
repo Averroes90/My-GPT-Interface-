@@ -1,5 +1,5 @@
 <template>
-  <v-col class="ai-message" :cols="deletionMode ? '11' : '12'">
+  <v-col class="ai-message pa-0">
     AI:
     <div  v-html="$markdown.render(response)"></div>
   </v-col>

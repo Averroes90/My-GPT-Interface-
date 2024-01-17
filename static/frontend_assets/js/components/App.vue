@@ -1,23 +1,23 @@
 <template>
-    <v-app>
-      <v-container fluid class="d-flex flex-column flex-grow-1">
-        <NotificationComponent/>
-        <v-card-actions
-          style="position: absolute; top: 0; right: 0; z-index: 1;">
-          <DeleteButtons @Delete:selectedInteractions="deleteSelectedInteractions"
-            @Delete:selectedConversation="deleteSelectedConversations"/>
-        </v-card-actions>
-          <ParentChatInstance1 @update:selectedInteractions="updateSelectedInteractions"
-            @update:selectedConversation="updateSelectedConversation" class="pb-0"/>
-          <!-- Delete Mode Toggle Button -->
-            <SwitchComponent
-              v-model="deletionMode"
-              color="red"
-              label="Toggle Deletion Mode"
-              :model="deletionMode"/>
-    </v-container>
-    </v-app>
-  </template>
+  <v-app>
+    <v-container fluid class="d-flex flex-column flex-grow-1">
+      <NotificationComponent/>
+      <v-card-actions
+        style="position: absolute; top: 0; right: 0; z-index: 2;">
+        <DeleteButtons @Delete:selectedInteractions="deleteSelectedInteractions"
+          @Delete:selectedConversation="deleteSelectedConversations"/>
+      </v-card-actions>
+        <ParentChatInstance1 @update:selectedInteractions="updateSelectedInteractions"
+          @update:selectedConversation="updateSelectedConversation" class="pb-0"/>
+        <!-- Delete Mode Toggle Button -->
+          <SwitchComponent
+            v-model="deletionMode"
+            color="red"
+            label="Toggle Deletion Mode"
+            :model="deletionMode"/>
+  </v-container>
+  </v-app>
+</template>
   
 <script setup>
   // Import your child components here

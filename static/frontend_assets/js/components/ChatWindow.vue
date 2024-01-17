@@ -1,20 +1,31 @@
 <template>
-    <v-container fluid class="d-flex mt-15 mb-10" style="height: 75vh;">
-    <div class="overflow-y-auto" ref="messagesContainer">
+    <v-container fluid class ="ma-0 pa-0">
+    <div>
       <v-row class="ma-0 pa-0">
-        <v-col v-for="(interaction, index) in interactions" :key="interaction.id" cols="12">
-          <v-row class="align-center">
+        <v-col v-for="(interaction, index) in interactions" 
+        :key="interaction.id" 
+        cols="12">
+        <v-card 
+         :color="deletionMode && selectedInteractions.includes(interaction.id) ? 'grey-darken-1' : ''" 
+          flat tile class="ma-0 pa-0">
+          <v-row class="align-start ml-0 pl-0">
             <!-- Conditional checkbox for deletion mode -->
-            <v-col v-if="deletionMode" cols="1">
-              <v-checkbox @change="toggleSelection(interaction.id)"></v-checkbox>
+            <v-col class="mr-n15" v-if="deletionMode" cols="1">
+              <v-checkbox-btn class="mr-0 pr-0 gr-0" color="red" 
+              @change="toggleSelection(interaction.id)"
+              :input-value="selectedInteractions.includes(interaction.id)"
+              density="compact"/>
             </v-col>
+            <v-col :cols="deletionMode ? '11' : '12'">
             <!-- User Message -->
             <UserMessage 
             :message="interaction.prompt" 
             :segments="interaction.segments"/>
             <!-- AI Message -->
             <AIMessage :response="interaction.response" />
+            </v-col>
           </v-row>
+        </v-card>
         </v-col>
       </v-row>
     </div>
@@ -31,42 +42,27 @@ const emit = defineEmits(['update:selectedInteractions']);
 const store = useStore();
 const uniqueId = toRef(props, 'uniqueId');
 // const uniqueId = ref("WindowMain"); //associated chatwindow
-const interactions = computed(() => store.state[`chat_${uniqueId.value}`].interactions);
 const deletionMode = computed(() => store.state.deletionMode);
+const interactions = computed(() => store.state[`chat_${uniqueId.value}`].interactions);
 const messagesContainer = ref(null);
+const selectedInteractions = ref([]);
 
 const toggleSelection = (id) => {
+  const index = selectedInteractions.value.indexOf(id);
+  if (index > -1) {
+    selectedInteractions.value.splice(index, 1); // Deselect
+  } else {
+    selectedInteractions.value.push(id); // Select
+  }
   emit('update:selectedInteractions', id);
 };
 
-// Watch for changes in interactions
-watch(interactions, (newInteractions, oldInteractions) => {
-  // Using nextTick to ensure the DOM is updated before attempting to scroll
-  nextTick(() => {
-    scrollToBottom();
-  });
-}, { deep: true });
 
-watch(deletionMode, (newdel, olddel) => {
-  // Using nextTick to ensure the DOM is updated before attempting to scroll
-  nextTick(() => {
-    scrollToBottom();
-  });
-}, { deep: true });
-
-
-const scrollToBottom = () => {
-  nextTick(() => {
-    if (messagesContainer.value) {
-      messagesContainer.value.scrollTop = messagesContainer.value.scrollHeight;
-    }
-  });
-};
 
 onBeforeUnmount(() => {
-  console.log('on beforemount');
-  store.unregisterModule(`chat_${uniqueId.value}`);
-  store.commit('REMOVE_CHAT_WINDOW_ID', uniqueId.value);
+  // console.log('on beforemount');
+  // store.unregisterModule(`chat_${uniqueId.value}`);
+  // store.commit('REMOVE_CHAT_WINDOW_ID', uniqueId.value);
 });
 </script>
 <style>

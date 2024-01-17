@@ -1,32 +1,36 @@
 <template>
-    <v-container fluid class="fill-height">
+     <v-container fluid class= "fill-height ma-0 pa-0">
       <!-- Child Components -->
-      <ChatWindow @update:selectedInteractions="updateSelectedInteractions" 
-        :uniqueId="uniqueId"/>
+          <TokenControls
+          :maxtokens="maxtokens"
+          @update:value="updateTokens"/>
+            <v-row fluid class="d-flex overflow-y-auto mt-15 mb-10" 
+              ref="messagesContainer" style="height: 73vh;">
+                  <ChatWindow @update:selectedInteractions="updateSelectedInteractions" 
+                    :uniqueId="uniqueId"/>
+            </v-row>
             <v-row 
-              justify="start"
-              class="d-flex">
-                <v-col cols=5 class="d-flex pb-0">
+              class="d-flex justify-start align-start">
+                <v-col cols=5 class="pb-0">
                   <PromptArea v-model="promptContent"
                     @sendprompt="sendPrompt"/>
                 </v-col>
-                <v-col cols=4 class="pb-0" >
-                  <v-row class="mb-0" >
+                <v-col cols=4>
+                  <v-row class="d-flex justify-start align-start" >
                     <v-col cols="1" >
-                      <v-checkbox-btn density ="comfortable" class="ma-0 pa-0"
+                      <v-checkbox-btn density ="compact" 
                         v-model="newConversationCheckboxState"
                         :disabled="!hasConversations"
-                        hide-details>
-                      </v-checkbox-btn> 
+                        hide-details/>
                     </v-col>
                     <v-col class="pr-0">
-                      <v-text-field class="ml-5" clearable label="New Conversation Title" 
+                      <v-text-field  clearable label="New Conversation Title" 
                       v-model= "newConversationTitle"
                       :disabled="!newConversationCheckboxState" 
                       ></v-text-field>
                     </v-col> 
                   </v-row> 
-                  <v-row > 
+                  <v-row class="d-flex align-end justify-end"> 
                     <ConversationDropdown
                       :items="conversationTitles" 
                       :selected="selectedConversation" 
@@ -34,31 +38,35 @@
                       v-model="selectedConversation"/>       
                   </v-row>
                 </v-col>
-            </v-row>    
-     </v-container>
+            </v-row>
+          </v-container>    
 </template>
 
 <script setup>
 
-import { ref, computed, onMounted, onBeforeMount, watch, defineEmits } from 'vue';
+import { ref, computed, onMounted, onBeforeMount, watch, defineEmits, nextTick } from 'vue';
 import { useStore } from 'vuex'; // Import Vuex store
 import ChatWindow from './ChatWindow.vue'
 import * as api from '../api.js';
 import { createChatWindowModule } from '../chatBoxDynamicModule.js';
 import ConversationDropdown from './ConversationDropdown.vue';
 import PromptArea from './PromptArea.vue';
+import TokenControls from './TokenControls.vue'
+
 
 const emit = defineEmits(); 
 const newConversationCheckboxState = ref(false); // Initialize a ref for newConversationCheckboxState
-//const conversationTitles = ref([]);
 const selectedInteractions = ref([]); // Keep a state in the parent too
-//const selectedConversation = ref(null); // Initialize a ref for selectedConversation
 const newConversationTitle = ref(''); // Initialize a ref for newConversationTitle
-//const hasConversations = ref(true); 
 const uniqueId = ref("WindowMain"); //associated chatwindow
 const promptContent = ref('');
+const interactions = computed(() => store.state[`chat_${uniqueId.value}`].interactions);
+const deletionMode = computed(() => store.state.deletionMode);
+const messagesContainer = ref(null);
 // Initialize store
 const store = useStore();
+const mintokens = 1;
+const maxtokens = ref(4096);
 
 store.registerModule(`chat_${uniqueId.value}`, createChatWindowModule(uniqueId.value));
 store.commit('ADD_CHAT_WINDOW_ID', uniqueId.value);
@@ -88,7 +96,10 @@ watch(selectedConversation, async (newVal, oldVal) => {
 const updateSelectedInteractions = (newSelectedInteractions) => {
   emit('update:selectedInteractions', newSelectedInteractions);
 };
+function updateTokens(newValue) {
+maxtokens.value = newValue 
 
+};
 async function sendPrompt() {
     // Validation checks similar to your existing code
     if (!checkUserEntries()) {
@@ -97,7 +108,7 @@ async function sendPrompt() {
     // Your hardcoded values
     const modelName = "gpt-4-1106-preview";  
     const tokenLimit = 128000;
-    const tokenReserve = 4096;
+    const tokenReserve = maxtokens.value;
     const payload = {
         userPrompt: promptContent.value,
         newConversationCheckbox: newConversationCheckboxState.value,
@@ -132,7 +143,29 @@ async function sendPrompt() {
     return true; // Return true to indicate that everything is okay
   }
 
+// Watch for changes in interactions
+watch(interactions, (newInteractions, oldInteractions) => {
+  // Using nextTick to ensure the DOM is updated before attempting to scroll
+  nextTick(() => {
+    scrollToBottom();
+  });
+}, { deep: true });
 
+watch(deletionMode, (newdel, olddel) => {
+  // Using nextTick to ensure the DOM is updated before attempting to scroll
+  nextTick(() => {
+    scrollToBottom();
+  });
+}, { deep: true });
+
+
+const scrollToBottom = () => {
+  nextTick(() => {
+    if (messagesContainer.value) {
+      messagesContainer.value.scrollTop = messagesContainer.value.scrollHeight;
+    }
+  });
+};
 onMounted(async () => {
   await store.dispatch(`chat_${uniqueId.value}/populateConversationTitleList`);
 });
