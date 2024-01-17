@@ -66,6 +66,7 @@ const messagesContainer = ref(null);
 // Initialize store
 const store = useStore();
 const mintokens = 1;
+const maxAllowedTokens =4096;
 const maxtokens = ref(4096);
 
 store.registerModule(`chat_${uniqueId.value}`, createChatWindowModule(uniqueId.value));
@@ -129,7 +130,6 @@ async function sendPrompt() {
     });
   };
   function checkUserEntries() {
-    //const newConversationCheckbox = newConversationCheckbox.value;
     const trimmednewConversationTitle = newConversationCheckboxState.value ? newConversationTitle.value.trim() : '';
 
     // Check if the user opted to create a new conversation but left the conversation title box empty
@@ -138,6 +138,27 @@ async function sendPrompt() {
         console.log('New Conversation Title cannot be empty when "New Conversation" is checked.');
         store.commit('ADD_NOTIFICATION', { message: 'New Conversation Title cannot be empty when "New Conversation" is checked.', type: 'error-message' });
         return false; // Return false to indicate an error
+    }
+    // Validate maxtokens as a string with only digits and optional leading/trailing spaces
+    if (!/^\s*\d+\s*$/.test(maxtokens.value)) {
+        store.commit('ADD_NOTIFICATION', {
+            message: `Max tokens must be a whole number without letters or special characters.`,
+            type: 'error-message'
+        });
+        return false;
+    }
+
+    // If the regular expression test passes, parse the value, which is known to be numeric
+    const maxTokensValue = parseInt(maxtokens.value, 10);
+
+    // Validate the numeric range of maxTokensValue
+    if (isNaN(maxTokensValue) || maxTokensValue < mintokens || maxTokensValue > maxAllowedTokens) {
+        const errorMessage = `Max tokens must be an integer between ${mintokens} and ${maxAllowedTokens}.`;
+        store.commit('ADD_NOTIFICATION', {
+            message: errorMessage,
+            type: 'error-message'
+        });
+        return false;
     }
     
     return true; // Return true to indicate that everything is okay

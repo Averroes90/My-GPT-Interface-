@@ -11,7 +11,7 @@
             density="compact"
             variant="solo-filled"
             class= "mt-1"
-            v-model.number="tokens"
+            v-model="tokens"
             ></v-text-field>
         </v-card>
         <v-card

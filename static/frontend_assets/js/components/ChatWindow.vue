@@ -60,9 +60,9 @@ const toggleSelection = (id) => {
 
 
 onBeforeUnmount(() => {
-  // console.log('on beforemount');
-  // store.unregisterModule(`chat_${uniqueId.value}`);
-  // store.commit('REMOVE_CHAT_WINDOW_ID', uniqueId.value);
+  console.log('on beforemount');
+  store.unregisterModule(`chat_${uniqueId.value}`);
+  store.commit('REMOVE_CHAT_WINDOW_ID', uniqueId.value);
 });
 </script>
 <style>
