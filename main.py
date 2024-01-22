@@ -72,15 +72,21 @@ def handle_prompt():
     token_limit = data['tokenLimit'] #total token limits for the model 
     token_reserve = data['tokenReserve'] #tokens reserved for new user's prompt in %
     #reserved_tokens = math.floor(token_limit * token_reserve)
+    if not isinstance(token_reserve, int):
+        return jsonify({'error': 'maxtokens expected an integer but got a string'}), 400
     reserved_tokens = token_reserve
     message = []
 
     if new_conversation_checkbox:
         new_conversation_title = new_conversation_title.strip() if new_conversation_title else None #trim whitespaces before/after
         if not conversation_title_exists(new_conversation_title):
-            conversation_session_id = create_new_conversation(new_conversation_title)
+            #following order of response first then create new convo is necessary
+            #to avoice catastrophic error
             truncation_index = -1  # Initialize to -1 to indicate no truncation
             message.append({"role": "user", "content": prompt_content})
+            # Generate response using the formatted message and model name
+            response = generate_text(message, model_name, reserved_tokens)  # Only receiving the response text
+            conversation_session_id = create_new_conversation(new_conversation_title)
         else:
             return jsonify({'error': 'The conversation title already exists'}), 400
     else:
@@ -96,10 +102,11 @@ def handle_prompt():
         for interaction in context_data:
             message.append({"role": "user", "content": interaction['prompt']})
             message.append({"role": "assistant", "content": interaction['response']})
+        # Generate response using the formatted message and model name
+        response = generate_text(message, model_name, reserved_tokens)  # Only receiving the response text
     
 
-    # Generate response using the formatted message and model name
-    response = generate_text(message, model_name, reserved_tokens)  # Only receiving the response text
+    
 
     # Store the interaction in the database
     interaction_id = store_interaction(conversation_session_id, prompt_content, response, model_name)

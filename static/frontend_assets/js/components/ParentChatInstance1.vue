@@ -98,7 +98,7 @@ const updateSelectedInteractions = (newSelectedInteractions) => {
   emit('update:selectedInteractions', newSelectedInteractions);
 };
 function updateTokens(newValue) {
-maxtokens.value = newValue 
+maxtokens.value = parseInt(newValue,10) 
 
 };
 async function sendPrompt() {

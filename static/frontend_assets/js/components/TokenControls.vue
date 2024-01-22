@@ -8,10 +8,11 @@
         height="80">
         <p class="ma-0 pa-0 text-grey-darken-4">Max Comp</p>
             <v-text-field
+            placeholder="4096"
             density="compact"
             variant="solo-filled"
             class= "mt-1"
-            v-model="tokens"
+            v-model.number="tokens"
             ></v-text-field>
         </v-card>
         <v-card
