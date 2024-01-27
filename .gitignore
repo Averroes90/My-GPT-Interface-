@@ -1,0 +1,6 @@
+__pycache__/
+node_modules/
+instance/interactions.db
+*.pyc
+.env
+.DS_Store
