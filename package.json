@@ -1,0 +1,50 @@
+{
+  "name": "gptinterface2",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack --config webpack.config.js",
+    "lint": "eslint 'frontend_assets/js/*.{js,vue,ts}'",
+    "format": "prettier --write 'frontend_assets/js/*.{js,vue,ts}'",
+    "start": "concurrently \"npm:webpack\" \"npm:flask\"",
+    "webpack": "webpack-dev-server --open",
+    "flask": "FLASK_APP=app.py flask run --host=0.0.0.0 --port=5001"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@mdi/font": "^7.2.96",
+    "@vue/compiler-sfc": "^3.3.4",
+    "font-awesome": "^4.7.0",
+    "github-markdown-css": "^5.5.0",
+    "highlight.js": "^11.9.0",
+    "highlightjs-vue": "^1.0.0",
+    "markdown-it": "^14.0.0",
+    "vee-validate": "^4.11.3",
+    "vue": "^3.3.4",
+    "vue-material-design-icons": "^5.2.0",
+    "vuetify": "^3.3.16",
+    "vuex": "^4.1.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.22.11",
+    "@babel/preset-env": "^7.22.10",
+    "babel-loader": "^9.1.3",
+    "concurrently": "^8.2.1",
+    "css-loader": "^6.8.1",
+    "eslint": "^8.48.0",
+    "eslint-config-prettier": "^9.0.0",
+    "eslint-plugin-prettier": "^5.0.0",
+    "file-loader": "^6.2.0",
+    "prettier": "^3.0.3",
+    "style-loader": "^3.3.3",
+    "vue-loader": "^17.2.2",
+    "vue-template-compiler": "^2.7.14",
+    "webpack": "^5.88.2",
+    "webpack-cli": "^5.1.4",
+    "webpack-dev-server": "^4.15.1"
+  }
+}
