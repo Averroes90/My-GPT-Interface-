@@ -4,13 +4,13 @@ import * as api from './api.js';
 
 export default {
   state: {
-    deletionMode: false,
+    selectMode: false,
     notifications: [],
     chatWindows:[],
   },
   mutations: {
-    toggleDeletionMode(state,newValue) {
-      state.deletionMode = newValue;
+    toggleSelectMode(state,newValue) {
+      state.selectMode = newValue;
     },
     
     ADD_NOTIFICATION(state, notification) { // New mutation for adding a notification

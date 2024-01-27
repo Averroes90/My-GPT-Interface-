@@ -9,17 +9,17 @@
           <!-- Displaying AI tokens -->
           <div>AI tokens: {{ interaction.response_tokens }}</div>
         <v-card 
-         :color="deletionMode && selectedInteractions.includes(interaction.id) ? 'grey-darken-1' : ''" 
+         :color="selectMode && selectedInteractions.includes(interaction.id) ? 'grey-darken-1' : ''" 
           flat tile class="ma-0 pa-0">
           <v-row class="align-start ml-0 pl-0">
-            <!-- Conditional checkbox for deletion mode -->
-            <v-col class="mr-n15" v-if="deletionMode" cols="1">
+            <!-- Conditional checkbox for select mode -->
+            <v-col class="mr-n15" v-if="selectMode" cols="1">
               <v-checkbox-btn class="mr-0 pr-0 gr-0" color="red" 
               @change="toggleSelection(interaction.id)"
               :input-value="selectedInteractions.includes(interaction.id)"
               density="compact"/>
             </v-col>
-            <v-col :cols="deletionMode ? '11' : '12'">
+            <v-col :cols="selectMode ? '11' : '12'">
             <!-- User Message -->
             <UserMessage 
             :message="interaction.prompt" 
@@ -45,7 +45,7 @@ const emit = defineEmits(['update:selectedInteractions']);
 const store = useStore();
 const uniqueId = toRef(props, 'uniqueId');
 // const uniqueId = ref("WindowMain"); //associated chatwindow
-const deletionMode = computed(() => store.state.deletionMode);
+const selectMode = computed(() => store.state.selectMode);
 const interactions = computed(() => store.state[`chat_${uniqueId.value}`].interactions);
 const messagesContainer = ref(null);
 const selectedInteractions = ref([]);

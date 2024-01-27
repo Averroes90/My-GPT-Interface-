@@ -3,14 +3,14 @@
     <!-- Deletion buttons -->
         <v-btn
             prepend-icon="mdi-trash-can" stacked
-            v-if="deletionMode"
+            v-if="selectMode"
             color="red"
             @click="deleteSelectedInteractions">
             Delete Selected Interactions
         </v-btn>
         <v-btn
             prepend-icon="mdi-trash-can" stacked
-            v-if="deletionMode"
+            v-if="selectMode"
             color="red"
             @click="deleteSelectedConversations">
             Delete Selected Conversation
@@ -24,7 +24,7 @@
     const store = useStore();
     const emit = defineEmits()
 
-    const deletionMode = computed(() => store.state.deletionMode)
+    const selectMode = computed(() => store.state.selectMode)
 
 
     const deleteSelectedInteractions = () => {

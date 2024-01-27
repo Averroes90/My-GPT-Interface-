@@ -14,7 +14,7 @@ import { useStore } from 'vuex';
 
 const props = defineProps({ response: String });
 const store = useStore();
-const deletionMode = computed(() => store.state.deletionMode);
+const selectMode = computed(() => store.state.selectMode);
 
 
 </script>

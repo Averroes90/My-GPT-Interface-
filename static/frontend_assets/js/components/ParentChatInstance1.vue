@@ -64,7 +64,7 @@ const newConversationTitle = ref(''); // Initialize a ref for newConversationTit
 const uniqueId = ref("WindowMain"); //associated chatwindow
 const promptContent = ref('');
 const interactions = computed(() => store.state[`chat_${uniqueId.value}`].interactions);
-const deletionMode = computed(() => store.state.deletionMode);
+const selectMode = computed(() => store.state.selectMode);
 const context_tokens = computed(() => store.state[`chat_${uniqueId.value}`].contextTokens);
 const total_tokens = computed(() => store.state[`chat_${uniqueId.value}`].totalTokens);
 
@@ -84,7 +84,7 @@ const remaining_tokens = computed(() => {
 
 store.registerModule(`chat_${uniqueId.value}`, createChatWindowModule(uniqueId.value));
 store.commit('ADD_CHAT_WINDOW', { id: uniqueId.value, modelType: modelName });
-//const deletionMode = computed(() => store.state.deletionMode)
+
 const hasConversations = computed(() => store.state[`chat_${uniqueId.value}`].has_conversations);
 const conversationTitles = computed(() => store.state[`chat_${uniqueId.value}`].conversationTitlelist);
 
@@ -182,7 +182,7 @@ watch(interactions, (newInteractions, oldInteractions) => {
   });
 }, { deep: true });
 
-watch(deletionMode, (newdel, olddel) => {
+watch(selectMode, (newdel, olddel) => {
   // Using nextTick to ensure the DOM is updated before attempting to scroll
   nextTick(() => {
     scrollToBottom();

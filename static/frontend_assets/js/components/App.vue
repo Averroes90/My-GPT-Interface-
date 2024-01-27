@@ -11,10 +11,10 @@
           @update:selectedConversation="updateSelectedConversation" class="pb-0"/>
         <!-- Delete Mode Toggle Button -->
           <SwitchComponent
-            v-model="deletionMode"
+            v-model="selectMode"
             color="red"
-            label="Toggle Deletion Mode"
-            :model="deletionMode"/>
+            label="Toggle Selection Mode"
+            :model="selectMode"/>
   </v-container>
   </v-app>
 </template>
@@ -30,9 +30,9 @@
   const store = useStore();
   const selectedInteractions = ref([]); // Keep a state in the parent too
   const selectedConversation = ref([]);
-  const deletionMode = computed({
-    get: () => store.state.deletionMode,
-    set: (newValue) => store.commit('toggleDeletionMode', newValue)
+  const selectMode = computed({
+    get: () => store.state.selectMode,
+    set: (newValue) => store.commit('toggleSelectMode', newValue)
   });
   
 const deleteSelectedInteractions = () => {
