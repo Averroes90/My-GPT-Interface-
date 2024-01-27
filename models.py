@@ -20,5 +20,7 @@ class Interaction(db.Model):
     prompt = db.Column(db.String(8192), nullable=False)
     response = db.Column(db.String(8192), nullable=False)
     token_count = db.Column(db.Integer, nullable=False)
+    prompt_token_count = db.Column(db.Integer)  # New field for token count of the prompt
+    response_token_count = db.Column(db.Integer)  # New field for token count of the response
     model_name = db.Column(db.String(256), nullable=False)  # New field to store the model name
     # Additional fields can be added in the future, e.g., sentiment

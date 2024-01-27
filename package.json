@@ -10,7 +10,7 @@
     "format": "prettier --write 'frontend_assets/js/*.{js,vue,ts}'",
     "start": "concurrently \"npm:webpack\" \"npm:flask\"",
     "webpack": "webpack-dev-server --open",
-    "flask": "FLASK_APP=main.py flask run --host=0.0.0.0 --port=5001"
+    "flask": "FLASK_APP=app.py flask run --host=0.0.0.0 --port=5001"
   },
   "keywords": [],
   "author": "",

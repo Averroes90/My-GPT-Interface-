@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <v-container fluid class="d-flex flex-column flex-grow-1">
+    <v-container fluid class="d-flex flex-column flex-grow-1 fill-height pb-0 align-start">
       <NotificationComponent/>
       <v-card-actions
         style="position: absolute; top: 0; right: 0; z-index: 2;">

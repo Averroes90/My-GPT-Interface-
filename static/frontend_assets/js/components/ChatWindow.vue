@@ -5,6 +5,9 @@
         <v-col v-for="(interaction, index) in interactions" 
         :key="interaction.id" 
         cols="12">
+          <div>User tokens: {{ interaction.prompt_tokens }}</div>
+          <!-- Displaying AI tokens -->
+          <div>AI tokens: {{ interaction.response_tokens }}</div>
         <v-card 
          :color="deletionMode && selectedInteractions.includes(interaction.id) ? 'grey-darken-1' : ''" 
           flat tile class="ma-0 pa-0">
@@ -59,11 +62,11 @@ const toggleSelection = (id) => {
 
 
 
-onBeforeUnmount(() => {
-  console.log('on beforemount');
-  store.unregisterModule(`chat_${uniqueId.value}`);
-  store.commit('REMOVE_CHAT_WINDOW_ID', uniqueId.value);
-});
+// onBeforeUnmount(() => {
+//   console.log('on beforemount');
+//   store.unregisterModule(`chat_${uniqueId.value}`);
+//   store.commit('REMOVE_CHAT_WINDOW_ID', uniqueId.value);
+// });
 </script>
 <style>
 .ai-message {

@@ -5,11 +5,15 @@ def store_interaction(conversation_session_id, prompt, response, model_name):
     """Store user interaction in the database."""
     
     # Count tokens for the combined prompt and response using the provided model name
+    prompt_tokens = count_tokens(prompt,model_name)
+    response_tokens = count_tokens(response,model_name)   
     total_tokens = count_tokens(prompt + response, model_name)
     
     interaction = Interaction(
         conversation_session_id=conversation_session_id,
         prompt=prompt, response=response, 
+        prompt_token_count = prompt_tokens,
+        response_token_count = response_tokens,
         token_count=total_tokens, model_name=model_name
     )
     db.session.add(interaction)
@@ -54,7 +58,12 @@ def get_conversation_by_title(title):
 def get_interactions_by_conversation(conversation_session_id):
     interactions = Interaction.query.filter_by(conversation_session_id=conversation_session_id).all()
     interactions_data = [
-        {'id': interaction.id, 'prompt': interaction.prompt, 'response': interaction.response} 
+        {'id': interaction.id, 
+         'prompt': interaction.prompt, 
+         'response': interaction.response,
+         'prompt_tokens':interaction.prompt_token_count,
+         'response_tokens':interaction.response_token_count,
+         'total_tokens':interaction.token_count} 
         for interaction in interactions
     ]
     return interactions_data

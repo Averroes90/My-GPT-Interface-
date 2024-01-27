@@ -1,22 +1,25 @@
 <template>
-     <v-container fluid class= "fill-height ma-0 pa-0">
+     <v-container fluid class= "ma-0 pa-0">
       <!-- Child Components -->
           <TokenControls
           :maxtokens="maxtokens"
+          :context_tokens="context_tokens"
+          :remaining_tokens="remaining_tokens"
+          :total_tokens="total_tokens"
+          :prompt_tokens ="promptContentTokenCount"
           @update:value="updateTokens"/>
             <v-row fluid class="d-flex overflow-y-auto mt-15 mb-10" 
-              ref="messagesContainer" style="height: 73vh;">
+              ref="messagesContainer" style="height: 75vh;">
                   <ChatWindow @update:selectedInteractions="updateSelectedInteractions" 
                     :uniqueId="uniqueId"/>
             </v-row>
-            <v-row 
-              class="d-flex justify-start align-start">
+            <v-row>
                 <v-col cols=5 class="pb-0">
                   <PromptArea v-model="promptContent"
                     @sendprompt="sendPrompt"/>
                 </v-col>
                 <v-col cols=4>
-                  <v-row class="d-flex justify-start align-start" >
+                  <v-row class="justify-start align-start" >
                     <v-col cols="1" >
                       <v-checkbox-btn density ="compact" 
                         v-model="newConversationCheckboxState"
@@ -48,11 +51,11 @@ import { ref, computed, onMounted, onBeforeMount, watch, defineEmits, nextTick }
 import { useStore } from 'vuex'; // Import Vuex store
 import ChatWindow from './ChatWindow.vue'
 import * as api from '../api.js';
-import { createChatWindowModule } from '../chatBoxDynamicModule.js';
+import { createChatWindowModule } from '../chatWindowDynamicModule.js';
 import ConversationDropdown from './ConversationDropdown.vue';
 import PromptArea from './PromptArea.vue';
 import TokenControls from './TokenControls.vue'
-
+import { useTokenCounter } from '../composables/useTokenCounter';
 
 const emit = defineEmits(); 
 const newConversationCheckboxState = ref(false); // Initialize a ref for newConversationCheckboxState
@@ -62,16 +65,25 @@ const uniqueId = ref("WindowMain"); //associated chatwindow
 const promptContent = ref('');
 const interactions = computed(() => store.state[`chat_${uniqueId.value}`].interactions);
 const deletionMode = computed(() => store.state.deletionMode);
+const context_tokens = computed(() => store.state[`chat_${uniqueId.value}`].contextTokens);
+const total_tokens = computed(() => store.state[`chat_${uniqueId.value}`].totalTokens);
+
 const messagesContainer = ref(null);
 // Initialize store
 const store = useStore();
 const mintokens = 1;
 const maxAllowedTokens =4096;
 const maxtokens = ref(4096);
+const modelName = "gpt-4-turbo-preview";  
+const tokenLimit = 128000;
+const { promptContentTokenCount } = useTokenCounter(promptContent);
+
+const remaining_tokens = computed(() => {
+  return tokenLimit - context_tokens.value
+})
 
 store.registerModule(`chat_${uniqueId.value}`, createChatWindowModule(uniqueId.value));
-store.commit('ADD_CHAT_WINDOW_ID', uniqueId.value);
-
+store.commit('ADD_CHAT_WINDOW', { id: uniqueId.value, modelType: modelName });
 //const deletionMode = computed(() => store.state.deletionMode)
 const hasConversations = computed(() => store.state[`chat_${uniqueId.value}`].has_conversations);
 const conversationTitles = computed(() => store.state[`chat_${uniqueId.value}`].conversationTitlelist);
@@ -88,7 +100,7 @@ watch(selectedConversation, async (newVal, oldVal) => {
     if (newConversationCheckboxState.value) {
       newConversationCheckboxState.value = false; // Uncheck the checkbox
     }
-    await store.dispatch(`chat_${uniqueId.value}/refreshChatWindow`);
+    await store.dispatch(`chat_${uniqueId.value}/refreshChatWindow`,{ modelName });
 
   }
 });
@@ -107,8 +119,6 @@ async function sendPrompt() {
         return; // Stop the function here if there was an error
     }
     // Your hardcoded values
-    const modelName = "gpt-4-1106-preview";  
-    const tokenLimit = 128000;
     const tokenReserve = maxtokens.value;
     const payload = {
         userPrompt: promptContent.value,

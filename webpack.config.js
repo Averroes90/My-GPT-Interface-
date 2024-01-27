@@ -12,7 +12,8 @@ module.exports = {
   output: {
     path: path.resolve(__dirname, 'static', 'dist'),
     filename: '[name].bundle.js',
-    publicPath: '/static/dist/'
+    publicPath: '/static/dist/',
+    clean: true, // Cleans the /dist folder before each build
   },
   resolve: {
     alias: {
@@ -60,7 +61,8 @@ module.exports = {
     new VueLoaderPlugin(), // Make sure this is up-to-date for Vue 3
     new webpack.DefinePlugin({
       __VUE_OPTIONS_API__: true,
-      __VUE_PROD_DEVTOOLS__: false
+      __VUE_PROD_DEVTOOLS__: false,
+      __VUE_PROD_HYDRATION_MISMATCH_DETAILS__: false
     }),
     new webpack.HotModuleReplacementPlugin()
   ]

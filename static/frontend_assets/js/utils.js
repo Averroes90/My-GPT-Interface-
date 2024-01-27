@@ -111,6 +111,8 @@ export function mapApiResponseToInteraction(data, userPrompt) {
     id: data.interactionId,
     prompt: userPrompt,
     response: data.response,
+    prompt_tokens: data.prompt_tokens,
+    response_tokens: data.response_tokens,
   };
 }
 /**

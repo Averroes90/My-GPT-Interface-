@@ -26,10 +26,10 @@ export async function getConversationTitles() {
     .then(response => response.json());
 }
 
-export async function fetchInteractions(conversation_session_id) {
-  const response = await fetch(`/api/get_interactions/${conversation_session_id}`);
+export async function fetchInteractions(conversation_session_id, modelName) {
+  const response = await fetch(`/api/get_interactions/${conversation_session_id}?model=${modelName}`);
   const data = await response.json();
-  return data.interactions;
+  return data;
 }
 
 // Function that serves as the common API endpoint caller for both interactions and conversations

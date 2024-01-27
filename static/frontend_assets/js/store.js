@@ -6,7 +6,7 @@ export default {
   state: {
     deletionMode: false,
     notifications: [],
-    chatWindowIds:[],
+    chatWindows:[],
   },
   mutations: {
     toggleDeletionMode(state,newValue) {
@@ -28,9 +28,11 @@ export default {
     REMOVE_CONVERSATION(state, conversationId) {
       // Logic to remove conversation from state
     },
-    ADD_CHAT_WINDOW_ID(state, id) {
-      if (!state.chatWindowIds.includes(id)) {
-        state.chatWindowIds.push(id);
+    ADD_CHAT_WINDOW(state, payload) {
+      // Payload should be an object with { id, modelType }
+      const existingWindow = state.chatWindows.find(window => window.id === payload.id);
+      if (!existingWindow) {
+        state.chatWindows.push(payload);
       }
     },
     REMOVE_CHAT_WINDOW_ID(state, id) {
@@ -78,8 +80,8 @@ export default {
         }
       },
       async refreshAllChatWindows(context) {
-        for (const id of context.state.chatWindowIds) {
-          await context.dispatch(`chat_${id}/refreshChatWindow`);
+        for (const chatWindow of context.state.chatWindows) {
+          await context.dispatch(`chat_${chatWindow.id}/refreshChatWindow`, { modelName: chatWindow.modelType });
         }
       },
     
