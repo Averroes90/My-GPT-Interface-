@@ -36,11 +36,11 @@ export default {
       }
     },
     REMOVE_CHAT_WINDOW_ID(state, id) {
-      const index = state.chatWindowIds.indexOf(id);
+      const index = state.chatWindows.findIndex(window => window.id === id);
       if (index !== -1) {
-        state.chatWindowIds.splice(index, 1);
+          state.chatWindows.splice(index, 1);
       }
-    },
+  },
   },
   actions: {
 
@@ -67,8 +67,8 @@ export default {
           const result = await api.deleteConversation(conversationId);
           if (result && result.success) {
             context.commit('ADD_NOTIFICATION', { message: 'Succesfully deleted Conversation!', type: 'success-message' });
-            for (const id of context.state.chatWindowIds) {
-              await context.dispatch(`chat_${id}/populateConversationTitleList`, id);
+            for (const chatWindow of context.state.chatWindows) {
+              await context.dispatch(`chat_${chatWindow.id}/populateConversationTitleList`, chatWindow.id);
             }             
            
           } else {

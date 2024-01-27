@@ -13,7 +13,7 @@
             v-if="deletionMode"
             color="red"
             @click="deleteSelectedConversations">
-            Delete Selected Conversations
+            Delete Selected Conversation
         </v-btn>
     </v-card>
 </template>
