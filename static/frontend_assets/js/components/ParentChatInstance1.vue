@@ -56,7 +56,7 @@ import ConversationDropdown from './ConversationDropdown.vue';
 import PromptArea from './PromptArea.vue';
 import TokenControls from './TokenControls.vue'
 import { useTokenCounter } from '../composables/useTokenCounter';
-
+import PopInteractionsButton from './PopInteractionsButton.vue';
 const emit = defineEmits(); 
 const newConversationCheckboxState = ref(false); // Initialize a ref for newConversationCheckboxState
 const selectedInteractions = ref([]); // Keep a state in the parent too
