@@ -1,0 +1,19 @@
+{
+    "extends": [
+      "eslint:recommended",
+      "plugin:vue/recommended",
+      "prettier"
+    ],
+    "plugins": ["prettier"],
+    "env": {
+      "es2021": true,
+      "browser": true,
+      "node": true
+    },
+    "rules": {
+      "prettier/prettier": "error"
+    },
+    "parserOptions": {
+      "ecmaVersion": 2021
+    }
+  }
