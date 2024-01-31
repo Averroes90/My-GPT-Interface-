@@ -84,6 +84,22 @@ export default {
           await context.dispatch(`chat_${chatWindow.id}/refreshChatWindow`, { modelName: chatWindow.modelType });
         }
       },
-    
+      async popSelectedInteractions(context, payload) {
+        try {
+          const result = await api.popInteractions(payload.ids, payload.newConversationTitle);
+          if (result && result.success) {
+            //replace with refresh chat window 
+            context.commit('ADD_NOTIFICATION', { message: 'New conversation created with selected interactions!', type: 'success-message' });
+            for (const chatWindow of context.state.chatWindows) {
+              await context.dispatch(`chat_${chatWindow.id}/populateConversationTitleList`, chatWindow.id);
+            }     
+          } else {
+            context.commit('ADD_NOTIFICATION', { message: 'Failed to pop intteractions.', type: 'error-message' });
+          }
+        } catch (error) {
+          console.error('Failed to pop interactions:', error);
+          context.commit('ADD_NOTIFICATION', { message: 'Failed to pop interactions.', type: 'error-message' });
+        }
+      },
   },
 };

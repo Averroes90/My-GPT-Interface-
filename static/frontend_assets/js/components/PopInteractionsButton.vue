@@ -1,6 +1,8 @@
 <template>
-<v-overlay class="justify-end align-center ma-0 pa-0"  
-    contained v-model="selectMode"
+<v-overlay class="justify-end align-end ma-0 pa-0"  
+    contained persistent
+    no-click-animation
+    :model-value="selectMode"
     :scrim="false"
     z-index="1"
     scroll-strategy="none">

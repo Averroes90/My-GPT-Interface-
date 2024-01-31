@@ -1,5 +1,7 @@
 from models import Interaction, db, Conversation
 from utils.utils import count_tokens
+import uuid
+from datetime import datetime
 
 def store_interaction(conversation_session_id, prompt, response, model_name):
     """Store user interaction in the database."""
@@ -7,14 +9,16 @@ def store_interaction(conversation_session_id, prompt, response, model_name):
     # Count tokens for the combined prompt and response using the provided model name
     prompt_tokens = count_tokens(prompt,model_name)
     response_tokens = count_tokens(response,model_name)   
-    total_tokens = count_tokens(prompt + response, model_name)
+    total_tokens = prompt_tokens + response_tokens
     
     interaction = Interaction(
         conversation_session_id=conversation_session_id,
-        prompt=prompt, response=response, 
+        prompt=prompt, 
+        response=response, 
         prompt_token_count = prompt_tokens,
         response_token_count = response_tokens,
-        token_count=total_tokens, model_name=model_name
+        token_count=total_tokens, 
+        model_name=model_name,
     )
     db.session.add(interaction)
     db.session.commit()
@@ -60,13 +64,15 @@ def get_interactions_by_conversation(conversation_session_id):
     interactions_data = [
         {'id': interaction.id, 
          'prompt': interaction.prompt, 
+         'timestamp': interaction.timestamp,
          'response': interaction.response,
          'prompt_tokens':interaction.prompt_token_count,
          'response_tokens':interaction.response_token_count,
          'total_tokens':interaction.token_count} 
         for interaction in interactions
     ]
-    return interactions_data
+    sorted_interactions = sorted(interactions_data, key=lambda x: x['id'])
+    return sorted_interactions
 
 def delete_interactions(ids):
     try:
@@ -96,3 +102,75 @@ def delete_conversations(ids):
     except Exception as e:
         print(f"Error deleting conversations and associated interactions: {e}")
         return False
+    
+def pop_interactions(ids, new_conversation_title):
+    try:
+        interactions = get_interactions_by_ids(ids)
+        retrieved_ids = set()
+        sorted_interactions = sorted(interactions, key=lambda x: x['id'])
+        # Add the ID to the set of retrieved IDs
+        retrieved_ids = {interaction['id'] for interaction in interactions}
+        missing_ids = set(ids) - retrieved_ids
+        if missing_ids:
+            print(f"These IDs were not found in the database: {missing_ids}")
+        try:
+            conversation_session_id = create_new_conversation(new_conversation_title)
+            store_interactions(sorted_interactions, conversation_session_id)
+        except Exception as e:
+            print(f"Error storing interactions: {e}")
+            return False
+        print(f"interactions popped successfully from within db_operations")
+        return True
+    except Exception as e:
+        print(f"Error finding interactions: {e}")
+        return False
+    
+
+def get_interactions_by_ids(interaction_ids):
+    """
+    Retrieve interactions by a list of interaction IDs.
+
+    :param interaction_ids: List of interaction IDs
+    :return: List of interactions with specified IDs
+    """
+    interactions = Interaction.query.filter(Interaction.id.in_(interaction_ids)).all()
+
+    return [{
+        'id': interaction.id,
+        'interaction_session_id': interaction.interaction_session_id,
+        'conversation_session_id': interaction.conversation_session_id,
+        'timestamp': interaction.timestamp,
+        'prompt': interaction.prompt,
+        'response': interaction.response,
+        'token_count': interaction.token_count,
+        'prompt_token_count': interaction.prompt_token_count,
+        'response_token_count': interaction.response_token_count,
+        'model_name': interaction.model_name
+    } for interaction in interactions]
+
+def store_interactions(interactions_data, conversation_session_id):
+    """
+    Store a list of interactions with a common conversation ID.
+
+    :param interactions_data: List of interaction data dictionaries
+    :param conversation_session_id: Common conversation session ID for all interactions
+    """
+    new_interactions = []
+
+    for data in interactions_data:
+        new_interaction = Interaction(
+            interaction_session_id=str(uuid.uuid4()),
+            conversation_session_id=conversation_session_id,
+            timestamp=datetime.utcnow(),
+            prompt=data['prompt'],
+            response=data['response'],
+            token_count=data['token_count'],
+            prompt_token_count=data['prompt_token_count'],
+            response_token_count=data['response_token_count'],
+            model_name=data['model_name'],
+        )
+        new_interactions.append(new_interaction)
+
+    db.session.add_all(new_interactions)
+    db.session.commit()
+

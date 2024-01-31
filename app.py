@@ -5,7 +5,7 @@ import os
 from models import db, Interaction, Conversation
 from config import config
 from db_operations import store_interaction, create_new_conversation, get_conversation_by_title, get_interactions_by_conversation
-from db_operations import delete_interactions, delete_conversations, conversation_title_exists, get_conversation_titles
+from db_operations import delete_interactions, delete_conversations, conversation_title_exists, get_conversation_titles, pop_interactions
 from openai_api import generate_text
 from utils.truncation_utils import truncate_interactions
 from utils.utils import count_tokens, add_role_tag_token_counts
@@ -145,7 +145,26 @@ def handle_prompt():
         'context_total_tokens': interactions_total_tokens,
         })
     
-
+@app.route('/api/popinteractions/', methods=['POST'])
+def pop_items():
+    data = request.json
+    interactionsIds = data.get('ids', [])
+    new_conversation_title = data.get('newConversationTitle')
+    new_conversation_title = new_conversation_title.strip() if new_conversation_title else None
+    if not conversation_title_exists(new_conversation_title):
+        # Log incoming data for debugging
+        print(f"Received interactionsIds: {interactionsIds}")
+    
+        if not interactionsIds:
+            return jsonify({'success': False, 'message': 'No IDs provided'}), 400
+        success = pop_interactions(interactionsIds,new_conversation_title)  # Implement this function in db_operations.py
+ 
+        if success:
+            return jsonify({'success': True})
+        else:
+            return jsonify({'success': False, 'message': 'Pop failed'}), 500
+    else:
+        return jsonify({'error': 'The conversation title already exists'}), 400
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5001, debug=True)

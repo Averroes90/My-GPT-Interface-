@@ -16,7 +16,7 @@ import * as directives from 'vuetify/directives';
 //import VeeValidate from 'vee-validate';
 
 // Initialize Vuex store
-const store = createStore(Store);
+export const store = createStore(Store);
 
 // Create Vuetify instance
 const vuetify = createVuetify({

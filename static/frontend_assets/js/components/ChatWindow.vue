@@ -30,27 +30,30 @@
           </v-row>
         </v-card>
         </v-col>
-          <PopInteractionsButton/>
+          <PopInteractionsButton @pop:selectedInteractions="popSelectedInteractions"/>
       </v-row>
     </v-container>
 </template>
 
 <script setup>
-import { computed, ref, onMounted, onBeforeUnmount, onUpdated, nextTick, defineProps, defineEmits, toRef, onBeforeMount, watch } from 'vue'
+import { computed, ref, defineProps, defineEmits, toRefs, watch } from 'vue'
 import { useStore } from 'vuex';
 import UserMessage from './UserMessage.vue';
 import AIMessage from './AIMessage.vue';
 import PopInteractionsButton from './PopInteractionsButton.vue';
+import { useNotifications } from '../composables/useNotifications';
 
-const props = defineProps({ uniqueId: String });
+const props = defineProps({ uniqueId: String,
+                            newConversationCheckboxState: Boolean,
+                            newConversationTitle: String });
 const emit = defineEmits(['update:selectedInteractions']);
 const store = useStore();
-const uniqueId = toRef(props, 'uniqueId');
+const {uniqueId, newConversationCheckboxState, newConversationTitle } = toRefs(props, 'uniqueId');
 // const uniqueId = ref("WindowMain"); //associated chatwindow
 const selectMode = computed(() => store.state.selectMode);
 const interactions = computed(() => store.state[`chat_${uniqueId.value}`].interactions);
-const messagesContainer = ref(null);
 const selectedInteractions = ref([]);
+const { addNotification } = useNotifications();
 
 const toggleSelection = (id) => {
   const index = selectedInteractions.value.indexOf(id);
@@ -59,9 +62,32 @@ const toggleSelection = (id) => {
   } else {
     selectedInteractions.value.push(id); // Select
   }
-  emit('update:selectedInteractions', id);
+  emit('update:selectedInteractions', selectedInteractions.value);
 };
 
+const popSelectedInteractions = () => {
+  const trimmedTitle = newConversationCheckboxState.value ? newConversationTitle.value.trim() : '';
+  if (!newConversationCheckboxState.value || trimmedTitle === '' ){
+    const errorMessage = 'Please enter a title for the new conversation'
+    addNotification(errorMessage, 'error-message');
+    return;
+  }
+  const userConfirmed = window.confirm("Are you sure you want to pop selected interactions to a new conversation?");
+  if (userConfirmed) {
+    const payload = {
+      ids: selectedInteractions.value,
+      newConversationTitle: newConversationTitle.value
+    }
+    store.dispatch('popSelectedInteractions', payload);
+    selectedInteractions.value = []; // Clear the selected items
+  }
+};
+
+watch(selectMode, (newVal) => {
+  if (newVal === false) {
+    selectedInteractions.value = [];
+  }
+});
 
 
 // onBeforeUnmount(() => {

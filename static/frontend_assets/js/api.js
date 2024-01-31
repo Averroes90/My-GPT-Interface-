@@ -59,3 +59,19 @@ export async function deleteConversation(conversationId) {
 
   return deleteItems('conversations', conversationId);
 }
+
+export async function popInteractions(interactionIds , newConversationTitle) {
+  try {
+    const response = await fetch('/api/popinteractions/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ ids: interactionIds, newConversationTitle: newConversationTitle, }),
+    });
+    return await response.json();
+  } catch (error) {
+    console.error('Error popping interactions', error);
+    return null;
+  }
+}

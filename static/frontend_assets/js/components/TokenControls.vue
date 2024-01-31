@@ -85,7 +85,7 @@
     </v-container>
 </template>
 <script setup>
-import {computed } from 'vue';
+import {computed, toRefs } from 'vue';
 
 const props = defineProps({ maxtokens: Number,
                             context_tokens: Number,
@@ -100,9 +100,10 @@ const tokens = computed({
   }
 });
 
-const context_tokens = computed(() => props.context_tokens);
-const remaining_tokens = computed(() => props.remaining_tokens);
-const total_tokens = computed(() => props.total_tokens);
-const prompt_tokens = computed(()=> props.prompt_tokens)
+const { context_tokens, 
+        remaining_tokens, 
+        total_tokens, 
+        prompt_tokens } = toRefs(props);
+        
 </script>
 

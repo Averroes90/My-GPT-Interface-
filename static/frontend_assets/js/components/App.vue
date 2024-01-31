@@ -51,17 +51,10 @@ const deleteSelectedConversations = () => {
   }
 };
 const updateSelectedInteractions = (newSelectedInteractions) => {
-  const indexI = selectedInteractions.value.indexOf(newSelectedInteractions);
-  if (indexI === -1) {
-    // ID not found in array, add it
-    selectedInteractions.value.push(newSelectedInteractions);
-  } else {
-    // ID found, remove it
-    selectedInteractions.value.splice(indexI, 1);
-  }
+    selectedInteractions.value = newSelectedInteractions
 };
 
 const updateSelectedConversation =(newSelectedConversation)=>{
-  selectedConversation.value = newSelectedConversation.value
+  selectedConversation.value = newSelectedConversation
 }
 </script>
