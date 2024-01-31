@@ -34,12 +34,28 @@ def create_new_conversation(title):
     return conversation.conversation_session_id
 
 def get_conversation_titles():
-    """Retrieve all conversation titles from the database."""
-    
+    """Retrieve all conversation titles and the selected conversation id from the database.
+       The selected conversation id will be the one with the latest interaction date.
+    """
+
+    # Retrieve all the conversation titles
     conversations = Conversation.query.all()
     has_conversations = len(conversations) > 0
-    titles = [{'id': conv.conversation_session_id, 'name': conv.title} for conv in conversations]
-    return titles, has_conversations
+
+    # Find the conversation with the latest interaction
+    latest_interaction = Interaction.query.order_by(Interaction.timestamp.desc()).first()
+
+    # Get the associated conversation_session_id or None if no conversations are available
+    selected_conversation_id = latest_interaction.conversation_session_id if latest_interaction else None
+
+    titles = [
+        {
+            'id': conv.conversation_session_id,
+            'name': conv.title
+        }
+        for conv in conversations
+    ]
+    return titles, has_conversations, selected_conversation_id
 
 def conversation_title_exists(title):
     """Check if a conversation with the given title already exists."""
@@ -68,7 +84,8 @@ def get_interactions_by_conversation(conversation_session_id):
          'response': interaction.response,
          'prompt_tokens':interaction.prompt_token_count,
          'response_tokens':interaction.response_token_count,
-         'total_tokens':interaction.token_count} 
+         'total_tokens':interaction.token_count,
+         'interaction_session_id':interaction.interaction_session_id} 
         for interaction in interactions
     ]
     sorted_interactions = sorted(interactions_data, key=lambda x: x['id'])
@@ -76,17 +93,22 @@ def get_interactions_by_conversation(conversation_session_id):
 
 def delete_interactions(ids):
     try:
-        for id in ids:
-            interaction = Interaction.query.get(id)
-            if interaction is None:
-                print(f"id {id} not in database")
-                
-        Interaction.query.filter(Interaction.id.in_(ids)).delete(synchronize_session='fetch')
-        db.session.commit()
-        print(f"interactions deleted successfully from within db_operations")
-        return True
+        interactions = get_interactions_by_ids(ids)
+        retrieved_ids = set()
+        retrieved_ids = {interaction['interaction_session_id'] for interaction in interactions}
+        missing_ids = set(ids) - retrieved_ids
+        if missing_ids:
+            print(f"These IDs were not found in the database: {missing_ids}")              
+        try: 
+            Interaction.query.filter(Interaction.interaction_session_id.in_(ids)).delete(synchronize_session='fetch')
+            db.session.commit()
+            print(f"interactions deleted successfully from within db_operations")
+            return True
+        except Exception as e:
+            print(f"Error deleting interactions: {e}")
+            return False
     except Exception as e:
-        print(f"Error deleting interactions: {e}")
+        print(f"Error finding interactions: {e}")
         return False
 
 def delete_conversations(ids):
@@ -109,7 +131,7 @@ def pop_interactions(ids, new_conversation_title):
         retrieved_ids = set()
         sorted_interactions = sorted(interactions, key=lambda x: x['id'])
         # Add the ID to the set of retrieved IDs
-        retrieved_ids = {interaction['id'] for interaction in interactions}
+        retrieved_ids = {interaction['interaction_session_id'] for interaction in interactions}
         missing_ids = set(ids) - retrieved_ids
         if missing_ids:
             print(f"These IDs were not found in the database: {missing_ids}")
@@ -133,7 +155,7 @@ def get_interactions_by_ids(interaction_ids):
     :param interaction_ids: List of interaction IDs
     :return: List of interactions with specified IDs
     """
-    interactions = Interaction.query.filter(Interaction.id.in_(interaction_ids)).all()
+    interactions = Interaction.query.filter(Interaction.interaction_session_id.in_(interaction_ids)).all()
 
     return [{
         'id': interaction.id,
