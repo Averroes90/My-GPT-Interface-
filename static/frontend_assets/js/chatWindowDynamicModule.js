@@ -40,9 +40,6 @@ export const createChatWindowModule = (uniqueId) => ({
     },
     SET_CONVERSATION_TITLES(state, titles) {
       state.conversationTitlelist = titles;
-      if (titles.length > 0) {
-        state.selectedConversationId = titles[titles.length - 1].id;
-      }
     },
     SET_HAS_CONVERSATIONS(state, hasConversations) {
       state.has_conversations = hasConversations;
@@ -74,7 +71,9 @@ export const createChatWindowModule = (uniqueId) => ({
         // Commit the titles and has_conversations to the state.
         context.commit('SET_CONVERSATION_TITLES', data.titles);
         context.commit('SET_HAS_CONVERSATIONS', data.titles.length > 0);
-  
+        if (data.titles.length >0) {
+          context.commit('setSelectedConversationId', data.selected_conversation_id);
+        }
       } catch (error) {
         console.error("Failed to populate conversation titles:", error);
         // Additional error handling logic here

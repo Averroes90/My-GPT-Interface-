@@ -3,20 +3,20 @@
 
       <v-row class="d-flex flex-column ma-0 pa-0 fill-height">
         <v-col v-for="(interaction, index) in interactions" 
-        :key="interaction.id" 
+        :key="interaction.interaction_session_id" 
         cols="auto">
           <div>User tokens: {{ interaction.prompt_tokens }}</div>
           <!-- Displaying AI tokens -->
           <div>AI tokens: {{ interaction.response_tokens }}</div>
         <v-card 
-         :color="selectMode && selectedInteractions.includes(interaction.id) ? 'grey-darken-1' : ''" 
+         :color="selectMode && selectedInteractions.includes(interaction.interaction_session_id) ? 'grey-darken-1' : ''" 
           flat tile class="ma-0 pa-0">
           <v-row class="align-start ml-0 pl-0 fill-height">
             <!-- Conditional checkbox for select mode -->
             <v-col class="mr-n15" v-if="selectMode" cols="1">
               <v-checkbox-btn class="mr-0 pr-0 gr-0" color="red" 
-              @change="toggleSelection(interaction.id)"
-              :input-value="selectedInteractions.includes(interaction.id)"
+              @change="toggleSelection(interaction.interaction_session_id)"
+              :input-value="selectedInteractions.includes(interaction.interaction_session_id)"
               density="compact"/>
             </v-col>
             <v-col :cols="selectMode ? '11' : '12'">
