@@ -1,5 +1,5 @@
 <template>
-  <v-virtual-scroll :items="interactions" height="1120">
+  <v-virtual-scroll :items="interactions" height="1130">
     <template v-slot:default="{item}">
       <v-card class="mt-2"
       :color="selectedInteractions.includes(item.interaction_session_id) ? 'grey-darken-3' : undefined"
