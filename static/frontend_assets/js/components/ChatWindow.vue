@@ -1,45 +1,41 @@
 <template>
-    <v-container fluid class ="ma-0 pa-0">
-
-      <v-row class="d-flex flex-column ma-0 pa-0 fill-height">
-        <v-col v-for="(interaction, index) in interactions" 
-        :key="interaction.interaction_session_id" 
-        cols="auto">
-          <div>User tokens: {{ interaction.prompt_tokens }}</div>
-          <!-- Displaying AI tokens -->
-          <div>AI tokens: {{ interaction.response_tokens }}</div>
-        <v-card 
-         :color="selectMode && selectedInteractions.includes(interaction.interaction_session_id) ? 'grey-darken-1' : ''" 
-          flat tile class="ma-0 pa-0">
-          <v-row class="align-start ml-0 pl-0 fill-height">
-            <!-- Conditional checkbox for select mode -->
-            <v-col class="mr-n15" v-if="selectMode" cols="1">
-              <v-checkbox-btn class="mr-0 pr-0 gr-0" color="red" 
-              @change="toggleSelection(interaction.interaction_session_id)"
-              :input-value="selectedInteractions.includes(interaction.interaction_session_id)"
-              density="compact"/>
-            </v-col>
-            <v-col :cols="selectMode ? '11' : '12'">
-            <!-- User Message -->
-            <UserMessage 
-            :message="interaction.prompt" 
-            :segments="interaction.segments"/>
-            <!-- AI Message -->
-            <AIMessage :response="interaction.response" />
-            </v-col>
-          </v-row>
-        </v-card>
-        </v-col>
-          <PopInteractionsButton @pop:selectedInteractions="popSelectedInteractions"/>
-      </v-row>
-    </v-container>
+  <v-virtual-scroll :items="interactions" height="1120">
+    <template v-slot:default="{item}">
+      <v-card class="mt-2"
+      :color="selectedInteractions.includes(item.interaction_session_id) ? 'grey-darken-3' : undefined"
+      v-on="selectMode ? { click: () => toggleSelection(item.interaction_session_id) } : {}"
+      :ripple="selectMode">
+        <div class="d-flex justify-space-between align-center">
+            <v-card-item class="text-overline">User Prompt:</v-card-item>
+          <v-card-actions>
+                <v-checkbox-btn v-if="selectMode"
+                color="red"  density="compact"
+                :modelValue="selectedInteractions.includes(item.interaction_session_id)"/>
+          </v-card-actions>
+          </div>
+          <v-card-item class="text-caption mt-n5">
+            Tokens: {{ item.prompt_tokens}}
+          </v-card-item>
+          <v-card-item class="text-body-1 mt-n5"> 
+            <div  v-html="$markdown.render(item.segments)"></div>
+          </v-card-item>
+          <v-divider></v-divider>
+          <v-card-item class="text-secondary text-overline">AI Response:</v-card-item>
+          <v-card-item class="text-caption text-secondary mt-n5">
+           Tokens: {{item.response_tokens }}
+          </v-card-item>
+          <v-card-item class="text-body-1 text-secondary mt-n5"> 
+            <div  v-html="$markdown.render(item.response)"></div>
+          </v-card-item>
+      </v-card>
+    </template>
+  </v-virtual-scroll>
+  <PopInteractionsButton @pop:selectedInteractions="popSelectedInteractions"/>
 </template>
 
 <script setup>
 import { computed, ref, defineProps, defineEmits, toRefs, watch } from 'vue'
 import { useStore } from 'vuex';
-import UserMessage from './UserMessage.vue';
-import AIMessage from './AIMessage.vue';
 import PopInteractionsButton from './PopInteractionsButton.vue';
 import { useNotifications } from '../composables/useNotifications';
 
@@ -62,7 +58,8 @@ const toggleSelection = (id) => {
   } else {
     selectedInteractions.value.push(id); // Select
   }
-  emit('update:selectedInteractions', selectedInteractions.value);
+  console.log(`selected ${selectedInteractions.value}`)
+  emit('update:selectedInteractions', selectedInteractions.value)
 };
 
 const popSelectedInteractions = () => {
@@ -88,7 +85,6 @@ watch(selectMode, (newVal) => {
     selectedInteractions.value = [];
   }
 });
-
 
 // onBeforeUnmount(() => {
 //   console.log('on beforemount');

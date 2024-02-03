@@ -1,5 +1,6 @@
 const path = require('path');
 const { VueLoaderPlugin } = require('vue-loader'); // Make sure vue-loader is up-to-date
+const { VuetifyPlugin } = require('webpack-plugin-vuetify')
 const webpack = require('webpack');
 
 module.exports = {
@@ -36,6 +37,14 @@ module.exports = {
       {
         test: /\.vue$/,
         loader: 'vue-loader' // Make sure this is up-to-date for Vue 3
+      },
+      {
+        test: /\.s[ac]ss$/i,
+        use: [
+          'style-loader', // Creates `style` nodes from JS strings
+          'css-loader',   // Translates CSS into CommonJS
+          'sass-loader',  // Compiles Sass to CSS
+        ],
       }
     ]
   },
@@ -59,6 +68,7 @@ module.exports = {
 
   plugins: [
     new VueLoaderPlugin(), // Make sure this is up-to-date for Vue 3
+    new VuetifyPlugin(),
     new webpack.DefinePlugin({
       __VUE_OPTIONS_API__: true,
       __VUE_PROD_DEVTOOLS__: false,

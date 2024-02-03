@@ -6,12 +6,11 @@ import Store from './store'; // import your Vuex Store
 import markdownItPlugin from './plugins/markdownItPlugin'; // Adjust the path as needed
 
 // Vuetify
-import 'vuetify/dist/vuetify.min.css';
+import 'vuetify/styles'
 // Material Design Icons
 import '@mdi/font/css/materialdesignicons.css';
 import { createVuetify } from 'vuetify';
-import * as components from 'vuetify/components';
-import * as directives from 'vuetify/directives';
+
 
 //import VeeValidate from 'vee-validate';
 
@@ -20,13 +19,18 @@ export const store = createStore(Store);
 
 // Create Vuetify instance
 const vuetify = createVuetify({
-  components,
-  directives,
   icons: {
     iconfont: 'mdi',
   },
   theme: {
     defaultTheme: 'dark',
+    themes:{
+      dark:{
+        colors:{
+          secondary: '#85c1e9'
+        }
+      }
+    }
   }
 });
 

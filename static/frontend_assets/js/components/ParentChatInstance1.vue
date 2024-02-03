@@ -8,14 +8,14 @@
           :total_tokens="total_tokens"
           :prompt_tokens ="promptContentTokenCount"
           @update:value="updateTokens"/>
-            <v-row fluid class="d-flex overflow-y-auto mt-15 mb-10" 
-              ref="messagesContainer" style="height: 75vh;">
+            <v-row fluid class="mt-15" >
                   <ChatWindow @update:selectedInteractions="updateSelectedInteractions" 
                     :uniqueId="uniqueId"
                     :newConversationCheckboxState="newConversationCheckboxState"
                     :newConversationTitle="newConversationTitle"/>
             </v-row>
             <v-row>
+              <v-divider></v-divider>
                 <v-col cols=5 class="pb-0">
                   <PromptArea v-model="promptContent"
                     @sendprompt="sendPrompt"/>
