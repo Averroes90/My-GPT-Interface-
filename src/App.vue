@@ -21,10 +21,10 @@
   
 <script setup>
   // Import your child components here
-  import NotificationComponent from './NotificationComponent.vue';
-  import ParentChatInstance1 from './ParentChatInstance1.vue';
-  import SwitchComponent from './SwitchComponent.vue';
-  import DeleteButtons from './DeleteButtons.vue';
+  import NotificationComponent from '@/components/NotificationComponent.vue';
+  import ParentChatInstance1 from '@/components/ParentChatInstance1.vue';
+  import SwitchComponent from '@/components/SwitchComponent.vue';
+  import DeleteButtons from '@/components/DeleteButtons.vue';
   import { computed, ref } from 'vue';
   import { useStore } from 'vuex';
   const store = useStore();

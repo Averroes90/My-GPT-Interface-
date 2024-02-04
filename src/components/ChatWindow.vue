@@ -37,7 +37,7 @@
 import { computed, ref, defineProps, defineEmits, toRefs, watch } from 'vue'
 import { useStore } from 'vuex';
 import PopInteractionsButton from './PopInteractionsButton.vue';
-import { useNotifications } from '../composables/useNotifications';
+import { useNotifications } from '@/composables/useNotifications';
 
 const props = defineProps({ uniqueId: String,
                             newConversationCheckboxState: Boolean,

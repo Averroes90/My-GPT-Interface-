@@ -52,12 +52,12 @@
 import { ref, computed, onMounted, onBeforeMount, watch, defineEmits, nextTick } from 'vue';
 import { useStore } from 'vuex'; // Import Vuex store
 import ChatWindow from './ChatWindow.vue'
-import { createChatWindowModule } from '../chatWindowDynamicModule.js';
+import { createChatWindowModule } from '@/store/chatWindowDynamicModule.js';
 import ConversationDropdown from './ConversationDropdown.vue';
 import PromptArea from './PromptArea.vue';
 import TokenControls from './TokenControls.vue'
-import { useTokenCounter } from '../composables/useTokenCounter';
-import {useConversationValidation ,useTokenValidation} from '../composables/useCustomValidations';
+import { useTokenCounter } from '@/composables/useTokenCounter';
+import {useConversationValidation ,useTokenValidation} from '@/composables/useCustomValidations';
 
 const emit = defineEmits(); 
 const newConversationCheckboxState = ref(false); // Initialize a ref for newConversationCheckboxState

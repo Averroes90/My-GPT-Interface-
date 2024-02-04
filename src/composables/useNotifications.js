@@ -1,4 +1,4 @@
-import { store } from '../vueApp'
+import { store } from '@/vueApp'
 
 
 export function useNotifications() {

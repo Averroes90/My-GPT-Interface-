@@ -1,9 +1,9 @@
 // Import the required function from Vue
 import { createApp } from 'vue';
 import { createStore } from 'vuex';
-import App from './components/App.vue'; 
-import Store from './store'; // import your Vuex Store
-import markdownItPlugin from './plugins/markdownItPlugin'; // Adjust the path as needed
+import App from './App.vue'; 
+import Store from './store/store'; // import your Vuex Store
+import markdownItPlugin from './plugins/markdownItPlugin'; 
 
 // Vuetify
 import 'vuetify/styles'

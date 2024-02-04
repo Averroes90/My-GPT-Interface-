@@ -1,6 +1,6 @@
 // GPTinterface2/static/frontend_assets/js/store.js
 
-import * as api from './api.js';
+import * as api from '@/api.js';
 
 export default {
   state: {

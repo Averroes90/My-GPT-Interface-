@@ -5,8 +5,8 @@ const webpack = require('webpack');
 
 module.exports = {
   entry: {
-    main: './static/frontend_assets/js/script.js',
-    vue: './static/frontend_assets/js/vueApp.js'
+    main: './src/script.js',
+    vue: './src/vueApp.js'
   },
   mode: 'development',
   devtool: 'eval-source-map',
@@ -18,8 +18,10 @@ module.exports = {
   },
   resolve: {
     alias: {
-      'vue': 'vue/dist/vue.esm-bundler.js'
-    }
+      'vue': 'vue/dist/vue.esm-bundler.js',
+      '@': path.resolve(__dirname, 'src')
+    },
+    extensions: ['.js', '.vue', '.json'],
   },
   module: {
     rules: [
@@ -41,9 +43,14 @@ module.exports = {
       {
         test: /\.s[ac]ss$/i,
         use: [
-          'style-loader', // Creates `style` nodes from JS strings
-          'css-loader',   // Translates CSS into CommonJS
-          'sass-loader',  // Compiles Sass to CSS
+          // Adds CSS to the DOM by injecting a `<style>` tag
+          'style-loader',
+          // Interprets `@import` and `url()` like `import/require()` and resolves them
+          'css-loader',
+          // Loader for webpack to process CSS with PostCSS
+          'postcss-loader',
+          // Loads a SASS/SCSS file and compiles it to CSS
+          'sass-loader',
         ],
       }
     ]
