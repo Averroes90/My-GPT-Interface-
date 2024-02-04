@@ -108,7 +108,7 @@ export function showNotification(messageContent, messageType) {
 export function mapApiResponseToInteraction(data, userPrompt) {
   return {
     
-    id: data.interactionId,
+    interaction_session_id: data.interactionId,
     prompt: userPrompt,
     response: data.response,
     prompt_tokens: data.prompt_tokens,

@@ -1,5 +1,5 @@
 <template>
-  <v-virtual-scroll :items="interactions" height="1130">
+  <v-virtual-scroll :key="listVersion" ref="virtualScrollRef" :items="interactions" height="1130">
     <template v-slot:default="{item}">
       <v-card class="mt-2"
       :color="selectedInteractions.includes(item.interaction_session_id) ? 'grey-darken-3' : undefined"
@@ -34,23 +34,35 @@
 </template>
 
 <script setup>
-import { computed, ref, defineProps, defineEmits, toRefs, watch } from 'vue'
+import { computed, ref, defineProps, defineEmits, toRefs, watch, nextTick } from 'vue'
 import { useStore } from 'vuex';
 import PopInteractionsButton from './PopInteractionsButton.vue';
 import { useNotifications } from '@/composables/useNotifications';
 
-const props = defineProps({ uniqueId: String,
-                            newConversationCheckboxState: Boolean,
-                            newConversationTitle: String });
+// Define component props
+const props = defineProps({
+  uniqueId: String,
+  newConversationCheckboxState: Boolean,
+  newConversationTitle: String,
+});
+
+// Define component emits
 const emit = defineEmits(['update:selectedInteractions']);
+
+// Composables and Vuex store usage
 const store = useStore();
-const {uniqueId, newConversationCheckboxState, newConversationTitle } = toRefs(props, 'uniqueId');
-// const uniqueId = ref("WindowMain"); //associated chatwindow
+const { addNotification } = useNotifications();
+
+// ToRefs utility
+const {uniqueId, newConversationCheckboxState, newConversationTitle } = toRefs(props);
+
+// Reactive state and computed properties
 const selectMode = computed(() => store.state.selectMode);
 const interactions = computed(() => store.state[`chat_${uniqueId.value}`].interactions);
 const selectedInteractions = ref([]);
-const { addNotification } = useNotifications();
-
+const virtualScrollRef = ref(null);
+const listVersion = ref(0)
+// Methods
 const toggleSelection = (id) => {
   const index = selectedInteractions.value.indexOf(id);
   if (index > -1) {
@@ -58,33 +70,59 @@ const toggleSelection = (id) => {
   } else {
     selectedInteractions.value.push(id); // Select
   }
-  console.log(`selected ${selectedInteractions.value}`)
-  emit('update:selectedInteractions', selectedInteractions.value)
+  emit('update:selectedInteractions', selectedInteractions.value);
 };
 
 const popSelectedInteractions = () => {
-  const trimmedTitle = newConversationCheckboxState.value ? newConversationTitle.value.trim() : '';
-  if (!newConversationCheckboxState.value || trimmedTitle === '' ){
-    const errorMessage = 'Please enter a title for the new conversation'
-    addNotification(errorMessage, 'error-message');
+  // Helper function for validating title
+  const isValidTitle = () =>
+    newConversationCheckboxState.value && newConversationTitle.value.trim() !== '';
+
+  if (!isValidTitle()) {
+    addNotification('Please enter a title for the new conversation', 'error-message');
     return;
   }
-  const userConfirmed = window.confirm("Are you sure you want to pop selected interactions to a new conversation?");
-  if (userConfirmed) {
-    const payload = {
+
+  if (window.confirm("Are you sure you want to pop selected interactions into a new conversation?")) {
+    store.dispatch('popSelectedInteractions', {
       ids: selectedInteractions.value,
-      newConversationTitle: newConversationTitle.value
-    }
-    store.dispatch('popSelectedInteractions', payload);
+      newConversationTitle: newConversationTitle.value,
+    });
     selectedInteractions.value = []; // Clear the selected items
   }
 };
 
+function scrollToItem(index) {
+  const virtualScroll = virtualScrollRef.value;
+  if (virtualScroll) {
+    virtualScroll.scrollToIndex(index);
+  }
+}
+
+
+// Watchers
 watch(selectMode, (newVal) => {
-  if (newVal === false) {
+  if (!newVal) {
     selectedInteractions.value = [];
   }
 });
+
+watch(interactions, (newInteractions, oldInteractions) => {
+  listVersion.value++;
+  const index = newInteractions.length -1 
+  if (index >= 0){
+    nextTick(() => {
+    scrollToItem(index)
+    })}
+})
+
+// watch(interactions, (newInteractions, oldInteractions) => {
+//   // Using nextTick to ensure the DOM is updated before attempting to scroll
+//   const index = newInteractions.length -1 
+//   nextTick(() => {
+//     scrollToItem(index)
+//   });
+// }, { deep: true });
 
 // onBeforeUnmount(() => {
 //   console.log('on beforemount');
@@ -93,9 +131,6 @@ watch(selectMode, (newVal) => {
 // });
 </script>
 <style>
-.ai-message {
-  color: #85c1e9;  /* This is a light blue shade which complements the existing dark theme */
-}
 
 h1, h2, h3, h4, h5, h6 {
   margin-top: 1em;

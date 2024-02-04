@@ -22,7 +22,7 @@ def store_interaction(conversation_session_id, prompt, response, model_name):
     )
     db.session.add(interaction)
     db.session.commit()
-    return interaction.id  # Return the ID of the newly created interaction
+    return interaction.interaction_session_id  # Return the ID of the newly created interaction
 
 def create_new_conversation(title):
     """Create a new conversation with the given title."""

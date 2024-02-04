@@ -37,6 +37,7 @@ export const createChatWindowModule = (uniqueId) => ({
         segments: classifyResponse(interaction.prompt),
       };
         state.interactions.push(processedInteraction);
+        state.interactions = state.interactions.slice(0);
     },
     SET_CONVERSATION_TITLES(state, titles) {
       state.conversationTitlelist = titles;
