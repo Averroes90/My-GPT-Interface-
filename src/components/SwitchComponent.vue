@@ -1,17 +1,28 @@
 <template>
-    <v-switch
-      hide-details
-      :model-value="model"
-      :color="color || 'primary'"
-      :label=label
-    ></v-switch>
-  </template>
-  <script setup>
-    import { ref, toRefs } from 'vue';
-    const props = defineProps({
-    color: String,
-    model: Boolean,
-    label: String,
-  });
-  const { color, model, label } = toRefs(props);
-  </script>
+	<v-switch
+		hide-details
+		:model-value="model"
+		:color="color"
+		:label="label"
+	></v-switch>
+</template>
+<script setup>
+import { toRefs } from 'vue';
+
+const props = defineProps({
+	color: {
+		type: String,
+		default: 'red',
+	},
+	model: {
+		type: Boolean,
+		default: false,
+	},
+	label: {
+		type: String,
+		default: '',
+	},
+});
+
+const { color, model, label } = toRefs(props);
+</script>

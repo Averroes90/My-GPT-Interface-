@@ -1,14 +1,11 @@
-import { store } from '@/vueApp'
-
+import { store } from '@/vueApp';
 
 export function useNotifications() {
+	const addNotification = (message, type) => {
+		store.commit('ADD_NOTIFICATION', { message, type });
+	};
 
-
-  const addNotification = (message, type) => {
-    store.commit('ADD_NOTIFICATION', { message, type });
-  };
-
-  return {
-    addNotification
-  };
+	return {
+		addNotification,
+	};
 }

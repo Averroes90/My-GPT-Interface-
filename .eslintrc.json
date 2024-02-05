@@ -1,27 +1,30 @@
 {
-    "extends": [
-      "eslint:recommended",
-      "plugin:vue/essential",
-      "prettier",
-      "prettier/vue"
-    ],
-    "plugins": [
-      "prettier",
-      "import",
-      "promise",
-      "security"
-    ],
-    "env": {
-      "es2021": true,
-      "browser": true,
-      "node": true
-    },
-    "rules": {
-      "prettier/prettier": "error"
-    },
-    "parserOptions": {
-      "ecmaVersion": 2023,
-      "sourceType": "module"
-    },
-    "ignorePatterns": ["static/dist/", "node_modules/"]
-  }
+  "extends": [
+    "eslint:recommended",
+    "plugin:vue/vue3-recommended", // Use this for Vue.js 3.x with recommended rules
+    "prettier"
+  ],
+  "plugins": [
+    "vue", // ensure 'vue' is specified as a plugin
+    "prettier",
+    "import",
+    "promise",
+    "security"
+  ],
+  "env": {
+    "es2021": true,
+    "browser": true,
+    "node": true
+  },
+  "rules": {
+    "prettier/prettier": "error"
+    // You can override/add specific rules here
+  },
+  "parser": "vue-eslint-parser",
+  "parserOptions": {
+    "ecmaVersion": 2023,
+    "parser": "@babel/eslint-parser", // You may need this for <script setup>
+    "sourceType": "module"
+  },
+  "ignorePatterns": ["static/dist/", "node_modules/"]
+}
