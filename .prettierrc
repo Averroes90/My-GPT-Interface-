@@ -4,8 +4,9 @@
     "tabWidth": 2,
     "semi": true,
     "printWidth": 80,
-    "useTabs":true,
+    "useTabs":false,
     "arrowParens": "always",
-    "htmlWhitespaceSensitivity": "css"
+    "htmlWhitespaceSensitivity": "css",
+    "bracketSpacing:":true
   }
   

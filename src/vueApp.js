@@ -18,19 +18,19 @@ export const store = createStore(Store);
 
 // Create Vuetify instance
 const vuetify = createVuetify({
-	icons: {
-		iconfont: 'mdi',
-	},
-	theme: {
-		defaultTheme: 'dark',
-		themes: {
-			dark: {
-				colors: {
-					secondary: '#85c1e9',
-				},
-			},
-		},
-	},
+  icons: {
+    iconfont: 'mdi',
+  },
+  theme: {
+    defaultTheme: 'dark',
+    themes: {
+      dark: {
+        colors: {
+          secondary: '#85c1e9',
+        },
+      },
+    },
+  },
 });
 
 // Create a new Vue app and mount it to an element
@@ -45,10 +45,10 @@ app.use(markdownItPlugin);
 app.mount('#chatAppVueRoot');
 
 if (import.meta.hot) {
-	import.meta.hot.accept(['./components/App.vue'], () => {
-		// Destroy the old Vue app instance and remount a new one
-		app.unmount();
-		const NextApp = require('./components/App.vue').default;
-		createApp(NextApp).use(vuetify).use(store).mount('#chatAppVueRoot');
-	});
+  import.meta.hot.accept(['./components/App.vue'], () => {
+    // Destroy the old Vue app instance and remount a new one
+    app.unmount();
+    const NextApp = require('./components/App.vue').default;
+    createApp(NextApp).use(vuetify).use(store).mount('#chatAppVueRoot');
+  });
 }

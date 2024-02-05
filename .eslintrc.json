@@ -17,7 +17,28 @@
     "node": true
   },
   "rules": {
-    "prettier/prettier": "error"
+    "prettier/prettier": "error",
+    "vue/block-tag-newline": "warn",
+    "vue/component-api-style":"warn",
+    "vue/define-macros-order":"warn",
+    "vue/html-comment-indent":"warn",
+    "vue/new-line-between-multi-line-property":"warn",
+    "vue/no-deprecated-model-definition":"error",
+    "vue/no-ref-object-reactivity-loss":"error",
+    "vue/no-setup-props-reactivity-loss":"warn",
+    "vue/no-unsupported-features":"warn",
+    "vue/no-unused-emit-declarations":"error",
+    "vue/no-unused-properties":"error",
+    "vue/no-unused-refs":"error",
+    "vue/no-useless-mustaches":"warn",
+    "vue/no-useless-v-bind":"error",
+    "vue/padding-line-between-blocks":"warn",
+    "vue/prefer-true-attribute-shorthand":"warn",
+    "vue/script-indent":"warn",
+    "vue/camelcase":"warn",
+    "vue/no-empty-pattern":"error",
+    "vue/no-irregular-whitespace":"warn"
+    //"no-console": "warn"
     // You can override/add specific rules here
   },
   "parser": "vue-eslint-parser",
