@@ -14,7 +14,6 @@
       <ParentChatInstance1
         class="pb-0"
         @update:selected-interactions="updateSelectedInteractions"
-        @update:selected-conversation="updateSelectedConversation"
       />
       <!-- Delete Mode Toggle Button -->
       <SwitchComponent
@@ -37,7 +36,6 @@ import { computed, ref } from 'vue';
 import { useStore } from 'vuex';
 const store = useStore();
 const selectedInteractions = ref([]); // Keep a state in the parent too
-const selectedConversation = ref([]);
 const selectMode = computed({
   get: () => store.state.selectMode,
   set: (newValue) => store.commit('toggleSelectMode', newValue),
@@ -63,16 +61,11 @@ const deleteSelectedConversations = () => {
   if (userConfirmed) {
     store.dispatch('deleteSelectedConversations', {
       type: 'conversations',
-      ids: [selectedConversation.value],
     });
     //selectedConversation.value = []; // Clear the selected items
   }
 };
 const updateSelectedInteractions = (newSelectedInteractions) => {
   selectedInteractions.value = newSelectedInteractions;
-};
-
-const updateSelectedConversation = (newSelectedConversation) => {
-  selectedConversation.value = newSelectedConversation;
 };
 </script>

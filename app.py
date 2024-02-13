@@ -36,7 +36,7 @@ def home():
 def fetch_conversation_titles():
     titles, has_conversations,selected_conversation_id  = get_conversation_titles()
     return jsonify({'titles': titles, 
-                    'has_conversations': has_conversations ,
+                    'has_conversations': has_conversations,
                     'selected_conversation_id':selected_conversation_id})
 
 @app.route('/api/get_interactions/<conversation_session_id>', methods=['GET'])

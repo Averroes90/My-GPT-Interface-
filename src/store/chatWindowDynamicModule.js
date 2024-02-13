@@ -9,9 +9,6 @@ export const createChatWindowModule = () => ({
   namespaced: true,
   state: () => ({
     interactions: [],
-    selectedConversationId: null,
-    conversationTitlelist: [],
-    has_conversations: false,
     contextTokens: 0,
     totalTokens: 0,
   }),
@@ -31,9 +28,7 @@ export const createChatWindowModule = () => ({
     incrementTotalTokens(state, tokensToAdd) {
       state.totalTokens += tokensToAdd;
     },
-    setSelectedConversationId(state, id) {
-      state.selectedConversationId = id;
-    },
+
     addInteraction(state, interaction) {
       const processedInteraction = {
         ...interaction,
@@ -42,53 +37,15 @@ export const createChatWindowModule = () => ({
       state.interactions.push(processedInteraction);
       state.interactions = state.interactions.slice(0);
     },
-    SET_CONVERSATION_TITLES(state, titles) {
-      state.conversationTitlelist = titles;
-    },
-    SET_HAS_CONVERSATIONS(state, hasConversations) {
-      state.has_conversations = hasConversations;
-    },
   },
   actions: {
-    async refreshChatWindow({ state, commit }, payload) {
+    async refreshChatWindow({ commit }, payload) {
       const response = await fetchInteractions(
-        state.selectedConversationId,
+        payload.selectedConversationId,
         payload.modelName
       );
       commit('setInteractions', response.interactions);
       commit('setTotalTokens', response.total_tokens);
-    },
-    async loadChatWindow(context, payload) {
-      try {
-        const data = await getConversationTitles();
-        const recentConversationId =
-          data.titles[data.titles.length - 1]?.id || null;
-        if (recentConversationId) {
-          context.commit('setSelectedConversationId', recentConversationId);
-          await context.dispatch('refreshChatWindow', payload);
-        }
-      } catch (error) {
-        console.error('Failed to load and refresh chat window:', error);
-        // add your error handling here
-      }
-    },
-    async populateConversationTitleList(context) {
-      try {
-        const data = await getConversationTitles();
-
-        // Commit the titles and has_conversations to the state.
-        context.commit('SET_CONVERSATION_TITLES', data.titles);
-        context.commit('SET_HAS_CONVERSATIONS', data.titles.length > 0);
-        if (data.titles.length > 0) {
-          context.commit(
-            'setSelectedConversationId',
-            data.selected_conversation_id
-          );
-        }
-      } catch (error) {
-        console.error('Failed to populate conversation titles:', error);
-        // Additional error handling logic here
-      }
     },
     async sendPrompt(context, payload) {
       try {
@@ -102,8 +59,20 @@ export const createChatWindowModule = () => ({
           payload.modelName
         );
         if (payload.newConversationCheckbox) {
-          await context.dispatch('populateConversationTitleList');
-          context.commit('setSelectedConversationId', data.conversationId); // Set the selected conversation ID
+          await context.dispatch(
+            'populateConversationTitleList',
+            { windowId: payload.windowId },
+            { root: true }
+          );
+          context.commit(
+            'ADD_ATTRIBUTE_TO_CHAT_WINDOW',
+            {
+              windowId: payload.windowId,
+              attributeName: 'selectedConversationId',
+              attributeValue: data.conversationId,
+            },
+            { root: true }
+          ); // Set the selected conversation ID
         } else {
           const transformedData = mapApiResponseToInteraction(
             data,
