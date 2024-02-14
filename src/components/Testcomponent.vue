@@ -2,48 +2,53 @@
 <template>
   <div class="textarea-container" ref="containerRef">
     <v-textarea
-      v-model="internalPromptContent"
-      clearable
-      placeholder="Enter your prompt here"
-      appendInner-icon="mdi-send"
-      no-resize
-      @click:append-inner="sendPrompt"
-      @keydown.enter="!$event.shiftKey && sendPrompt()"
-      ref="textareaRef"
-      :counter="100"
-      :counter-value="customCounter"
-    ></v-textarea>
-    <v-overlay
-      v-model="menuVisible"
-      :attach="containerRef"
-      contained
-      persistent
-      no-click-animation
-      :scrim="false"
-      z-index="1"
-      scroll-strategy="none"
-      location-strategy="connected"
-      location="end bottom"
-      :target="textareaRef"
-      offset="-35"
-      appendInner-icon="mdi-send"
-    >
-      <v-icon icon="mdi-send" class="mb-2"></v-icon>
-    </v-overlay>
-  </div>
+    v-model="internalPromptContent"
+    clearable
+    placeholder="Enter your prompt here"
+    appendInner-icon='mdi-send'
+
+    no-resize
+    @click:append-inner="sendPrompt"
+    @keydown.enter="!$event.shiftKey && sendPrompt()"
+    ref="textareaRef"
+    :counter="100" 
+    :counter-value="customCounter"
+  ></v-textarea>
+  <v-overlay 
+  v-model="menuVisible" 
+  :attach="containerRef"
+  contained
+  persistent
+  no-click-animation
+  :scrim="false"
+  z-index="1"
+  scroll-strategy="none"
+  location-strategy="connected"
+  location="end bottom"
+  :target="textareaRef"
+  offset="-35"
+  appendInner-icon='mdi-send'
+  >
+<v-icon 
+icon='mdi-send'
+class="mb-2"
+></v-icon>
+</v-overlay>
+</div>
 </template>
 
 <script setup>
 import { ref, computed, onMounted } from 'vue';
 
+
 const props = defineProps({
-  promptContent: {
-    type: String,
-    default: '',
-  },
+	promptContent: {
+        type: String,
+        default: '',
+    },
 });
 
-const emit = defineEmits(['sendprompt', 'update:promptContent']);
+const emit = defineEmits(['sendprompt','update:promptContent']);
 
 const menuVisible = ref(true); // Keep the menu always visible
 const attachSelector = '.v-text-area__slot'; // Attach to the slot within the v-textarea
@@ -65,6 +70,7 @@ function customCounter(value) {
 const sendPrompt = () => {
   emit('sendprompt');
 };
+
 </script>
 <style scoped>
 .textarea-container {
