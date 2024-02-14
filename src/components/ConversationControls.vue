@@ -70,12 +70,32 @@ const props = defineProps({
     type: String,
     required: true,
   },
+  newConversationTitle: {
+    type: String,
+    default: '',
+  },
+  newConversationCheckboxState: {
+    type: Boolean,
+    default: false,
+  },
 });
+
+const emit = defineEmits(['update:newConversationTitle','update:newConversationCheckboxState']);
+
 const { uniqueId, modelName } = toRefs(props);
 const maxResponseTokens = ref(4096);
-const newConversationCheckboxState = ref(false); // Initialize a ref for newConversationCheckboxState
-const newConversationTitle = ref(''); // Initialize a ref for newConversationTitle
-
+const newConversationTitle = computed({
+  get: () => props.newConversationTitle,
+  set: (newValue) => {
+    emit('update:newConversationTitle', newValue);
+  },
+});
+const newConversationCheckboxState = computed({
+  get: () => props.newConversationCheckboxState,
+  set: (newValue) => {
+    emit('update:newConversationCheckboxState', newValue);
+  },
+});
 // Initialize store
 const store = useStore();
 
@@ -121,4 +141,5 @@ watch(selectedConversation, async (newVal, oldVal) => {
     await refreshChatWindow(newVal);
   }
 });
+
 </script>

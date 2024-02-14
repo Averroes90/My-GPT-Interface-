@@ -11,7 +11,12 @@
         @model-name-updated="handleModelNameUpdated"
       />
     </v-row>
-    <ConversationControls :unique-id="windowIdRef" :model-name="modelNameRef" />
+    <ConversationControls 
+    v-model:new-conversation-title="newConversationTitle"
+    v-model:new-conversation-checkbox-state="newConversationCheckboxState"
+    :unique-id="windowIdRef" 
+    :model-name="modelNameRef" 
+    />
   </v-container>
 </template>
 
@@ -39,6 +44,5 @@ const updateSelectedInteractions = (newSelectedInteractions) => {
 function handleModelNameUpdated(newModelName) {
   modelNameRef.value = newModelName;
 }
-
 
 </script>
