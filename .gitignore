@@ -7,3 +7,4 @@ instance/interactions.db
 .env.dev
 .env.prod
 .env.test
+interactions.db
