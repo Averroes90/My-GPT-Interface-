@@ -16,14 +16,14 @@
         <v-card
           class="mt-2"
           :color="
-            selectedInteractions.includes(item.interaction_session_id)
+            selectedInteractions.includes(item.interactionSessionId)
               ? 'grey-darken-3'
               : undefined
           "
           :ripple="selectMode"
           v-on="
             selectMode
-              ? { click: () => toggleSelection(item.interaction_session_id) }
+              ? { click: () => toggleSelection(item.interactionSessionId) }
               : {}
           "
         >
@@ -35,7 +35,7 @@
                 color="red"
                 density="compact"
                 :model-value="
-                  selectedInteractions.includes(item.interaction_session_id)
+                  selectedInteractions.includes(item.interactionSessionId)
                 "
               />
             </v-card-actions>
@@ -102,6 +102,9 @@ const props = defineProps({
     default: '',
   },
 });
+// Define component emits
+const emit = defineEmits(['update:selectedInteractions']);
+
 // ToRefs utility
 const {
   uniqueId,
@@ -109,9 +112,6 @@ const {
   newConversationCheckboxState,
   newConversationTitle,
 } = toRefs(props);
-
-// Define component emits
-const emit = defineEmits(['update:selectedInteractions']);
 
 // Composables and Vuex store usage
 const store = useStore();
@@ -129,9 +129,12 @@ const remainingTokens = computed(() => {
   return tokenLimit - contextTokens.value;
 });
 
+// eslint-disable-next-line vue/no-ref-object-reactivity-loss
 store.registerModule(`chat_${uniqueId.value}`, createChatWindowModule());
 store.commit('ADD_CHAT_WINDOW', {
+  // eslint-disable-next-line vue/no-ref-object-reactivity-loss
   windowId: uniqueId.value,
+  // eslint-disable-next-line vue/no-ref-object-reactivity-loss
   modelName: modelName.value,
 });
 
@@ -217,6 +220,7 @@ onBeforeUnmount(() => {
   store.commit('REMOVE_CHAT_WINDOW', uniqueId.value);
 });
 </script>
+
 <style lang="scss">
 h1,
 h2,

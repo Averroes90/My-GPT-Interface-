@@ -80,7 +80,6 @@ class ConversationRepositoryAsync(ConversationRepositoryBase):
             .options(selectinload(Conversation.interactions))
             .where(Conversation.conversation_session_id == conversation_session_id)
         )
-        print(f"session2 {self.session}")
         result = await self.session.execute(stmt)
         return result.scalars().first()
 

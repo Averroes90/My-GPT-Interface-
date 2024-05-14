@@ -8,3 +8,5 @@ instance/interactions.db
 .env.prod
 .env.test
 interactions.db
+main.pem
+venv

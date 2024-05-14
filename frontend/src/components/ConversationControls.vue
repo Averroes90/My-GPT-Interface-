@@ -4,11 +4,11 @@
     <v-col cols="5" class="pb-0">
       <PromptArea
         v-model:new-conversation-title="newConversationTitle"
-        :newConversationCheckbox="newConversationCheckboxState"
-        :selectedConversation="selectedConversation"
-        :modelName="modelName"
-        :windowId="uniqueId"
-        :maxResponseTokens="maxResponseTokens"
+        :new-conversation-checkbox="newConversationCheckboxState"
+        :selected-conversation="selectedConversation"
+        :model-name="modelName"
+        :window-id="uniqueId"
+        :max-response-tokens="maxResponseTokens"
       />
     </v-col>
     <v-col cols="4" class="pb-0">
@@ -34,9 +34,9 @@
       <v-row class="align-center">
         <v-col cols="3">
           <v-text-field
+            v-model.number="maxResponseTokens"
             hide-spin-buttons
             type="number"
-            v-model.number="maxResponseTokens"
             placeholder="4096"
             density="compact"
             variant="outlined"
@@ -56,6 +56,7 @@
     </v-col>
   </v-row>
 </template>
+
 <script setup>
 import { ref, computed, watch, toRefs } from 'vue';
 import { useStore } from 'vuex'; // Import Vuex store
@@ -104,7 +105,7 @@ const store = useStore();
 
 const hasConversations = computed(() => {
   const chatWindow = store.state.chatWindows[uniqueId.value];
-  return chatWindow ? chatWindow.has_conversations : false;
+  return chatWindow ? chatWindow.hasConversations : false;
 });
 const conversationTitles = computed(() => {
   const chatWindow = store.state.chatWindows[uniqueId.value];

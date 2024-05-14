@@ -1,6 +1,7 @@
 // Import the required function from Vue
 import { createApp } from 'vue';
 import { createStore } from 'vuex';
+import { createPinia } from 'pinia';
 import App from './App.vue';
 import Store from './store/store'; // import your Vuex Store
 import markdownItPlugin from './plugins/markdownItPlugin';
@@ -39,6 +40,7 @@ const app = createApp(App);
 //app.config.globalProperties.$delimiters = ['[[', ']]'];
 app.use(vuetify);
 app.use(store); // Use Vuex store
+app.use(createPinia());
 //app.use(highlightPlugin);
 app.use(markdownItPlugin);
 

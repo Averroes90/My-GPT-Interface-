@@ -1,8 +1,7 @@
 import {
   fetchInteractions,
   sendPromptToBackend,
-  getConversationTitles,
-} from '@/api.js';
+} from '@/services/api/apiService.js';
 import { mapApiResponseToInteraction, classifyResponse } from '@/utils.js';
 
 export const createChatWindowModule = () => ({

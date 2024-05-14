@@ -1,12 +1,12 @@
 const path = require('path');
 const { VueLoaderPlugin } = require('vue-loader'); // Make sure vue-loader is up-to-date
-const { VuetifyPlugin } = require('webpack-plugin-vuetify')
+const { VuetifyPlugin } = require('webpack-plugin-vuetify');
 const webpack = require('webpack');
 
 module.exports = {
   entry: {
     main: './src/script.js',
-    vue: './src/vueApp.js'
+    vue: './src/vueApp.js',
   },
   mode: 'development',
   devtool: 'eval-source-map',
@@ -18,10 +18,10 @@ module.exports = {
   },
   resolve: {
     alias: {
-      'vue': 'vue/dist/vue.esm-bundler.js',
-      '@': path.resolve(__dirname, 'src')
+      vue: 'vue/dist/vue.esm-bundler.js',
+      '@': path.resolve(__dirname, 'src'),
     },
-    extensions: ['.js', '.vue', '.json'],
+    extensions: ['.ts', '.tsx', '.js', '.vue', '.json'],
   },
   module: {
     rules: [
@@ -38,7 +38,18 @@ module.exports = {
       },
       {
         test: /\.vue$/,
-        loader: 'vue-loader' // Make sure this is up-to-date for Vue 3
+        loader: 'vue-loader', // Make sure this is up-to-date for Vue 3
+      },
+      // TypeScript loader
+      {
+        test: /\.tsx?$/,
+        exclude: /node_modules/,
+        use: {
+          loader: 'ts-loader',
+          options: {
+            appendTsSuffixTo: [/\.vue$/], // Allows ts-loader to process .vue files
+          },
+        },
       },
       {
         test: /\.s[ac]ss$/i,
@@ -52,23 +63,23 @@ module.exports = {
           // Loads a SASS/SCSS file and compiles it to CSS
           'sass-loader',
         ],
-      }
-    ]
+      },
+    ],
   },
   optimization: {
     moduleIds: 'named',
-    runtimeChunk: 'single'
+    runtimeChunk: 'single',
   },
 
   devServer: {
-    static: './templates/',  // where your index.html file is located
-    port: 8080,  // port to run the dev server on
+    static: './templates/', // where your index.html file is located
+    port: 8080, // port to run the dev server on
     proxy: {
       '/api': {
         target: 'http://127.0.0.1:5001',
         changeOrigin: true,
         logLevel: 'debug',
-        hot:true
+        hot: true,
       },
     },
   },
@@ -79,8 +90,8 @@ module.exports = {
     new webpack.DefinePlugin({
       __VUE_OPTIONS_API__: true,
       __VUE_PROD_DEVTOOLS__: false,
-      __VUE_PROD_HYDRATION_MISMATCH_DETAILS__: false
+      __VUE_PROD_HYDRATION_MISMATCH_DETAILS__: false,
     }),
-    new webpack.HotModuleReplacementPlugin()
-  ]
+    new webpack.HotModuleReplacementPlugin(),
+  ],
 };

@@ -1,6 +1,6 @@
 // GPTinterface2/static/frontend_assets/js/store.js
 
-import * as api from '@/api.js';
+import * as api from '@/services/api/apiService.js';
 
 export default {
   state: {
@@ -29,7 +29,7 @@ export default {
         state.chatWindows[windowId] = {
           selectedConversationId: null,
           conversationTitleList: [],
-          has_conversations: false,
+          hasConversations: false,
           modelName: modelName, // Initialized here
         };
       } else {
@@ -56,21 +56,22 @@ export default {
       try {
         const data = await api.getConversationTitles();
         // Commit the titles and has_conversations to the state.
+        console.log(`data${data}`);
         context.commit('ADD_ATTRIBUTE_TO_CHAT_WINDOW', {
           windowId: payload.windowId,
           attributeName: 'conversationTitleList',
-          attributeValue: data.conversation_list,
+          attributeValue: data.conversationList,
         });
         context.commit('ADD_ATTRIBUTE_TO_CHAT_WINDOW', {
           windowId: payload.windowId,
-          attributeName: 'has_conversations',
-          attributeValue: data.has_conversations,
+          attributeName: 'hasConversations',
+          attributeValue: data.hasConversations,
         });
-        if (data.conversation_list.length > 0) {
+        if (data.conversationList.length > 0) {
           context.commit('ADD_ATTRIBUTE_TO_CHAT_WINDOW', {
             windowId: payload.windowId,
             attributeName: 'selectedConversationId',
-            attributeValue: data.selected_conversation_id,
+            attributeValue: data.selectedConversationId,
           });
         }
       } catch (error) {

@@ -1,4 +1,4 @@
-import * as api from './api.js';
+import * as api from './services/api/apiService.js';
 import * as utils from './utils.js';
 import hljs from 'highlight.js';
 //import 'highlight.js/styles/github-dark.css'; // or any other style you prefer

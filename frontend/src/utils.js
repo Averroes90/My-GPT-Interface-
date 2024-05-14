@@ -1,5 +1,5 @@
 import * as ui from './ui.js';
-import * as api from './api.js';
+import * as api from './services/api/apiService.js';
 import hljs from 'highlight.js';
 
 export async function deleteSelectedItems(type) {
@@ -107,11 +107,11 @@ export function showNotification(messageContent, messageType) {
  */
 export function mapApiResponseToInteraction(data, userPrompt) {
   return {
-    interaction_session_id: data.interaction_session_id,
+    interactionSessionId: data.interaction_session_id,
     prompt: userPrompt,
     response: data.response,
-    prompt_token_count: data.prompt_token_count,
-    response_token_count: data.response_token_count,
+    promptTokenCount: data.prompt_token_count,
+    responseTokenCount: data.response_token_count,
   };
 }
 
@@ -163,40 +163,6 @@ export function escapeHtml(unsafe) {
     .replace(/"/g, '&quot;')
     .replace(/'/g, '&#039;');
 }
-
-/**
- * Splits and classifies the response into code and text segments.
- * @param {string} response - Raw response string
- * @return {Array} Array of objects with `type` and `value`
- */
-// export function classifyResponse(response) {
-//   const segments = [];
-//   const parts = response.split('```');
-//   for (let i = 0; i < parts.length; i++) {
-//     if (i % 2 === 0) {
-//       segments.push({ type: 'text', value: parts[i] });
-//     } else {
-//       segments.push({ type: 'code', value: parts[i] });
-//     }
-//   }
-//   return segments;
-// }
-
-// export function classifyResponse(response) {
-//   const regex = /```([\s\S]*?)```|([\s\S]+?)(?=```|$)/g;
-//   const segments = [];
-//   let match;
-//   while ((match = regex.exec(response)) !== null) {
-//     if (match[1]) {
-//       console.log(`classify code: ${match[1]}`)
-//       segments.push({ type: 'code', value: match[1] });
-//     } else if (match[2]) {
-//       console.log(`classify text: ${match[0]}`)
-//       segments.push({ type: 'text', value: match[2] });
-//     }
-//   }
-//   return segments;
-// }
 
 export function classifyResponse(response) {
   const regex = /```([\s\S]*?)```|([\s\S]+?)(?=```|$)/g;

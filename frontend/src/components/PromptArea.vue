@@ -4,14 +4,14 @@
     v-model="promptContent"
     clearable
     placeholder="Enter your prompt here"
-    appendInner-icon="mdi-send"
+    append-inner-icon="mdi-send"
     no-resize
-    @click:append-inner="sendPrompt"
-    @keydown.enter="!$event.shiftKey && sendPrompt()"
     :counter="promptTokenLimit"
     :counter-value="customCounter"
     :rules="rules"
     variant="outlined"
+    @click:append-inner="sendPrompt"
+    @keydown.enter="!$event.shiftKey && sendPrompt()"
   ></v-textarea>
 </template>
 
@@ -23,8 +23,6 @@ import {
   useConversationValidation,
   useTokenValidation,
 } from '@/composables/useCustomValidations';
-const promptContent = ref('');
-const { promptContentTokenCount } = useTokenCounter(promptContent);
 const props = defineProps({
   newConversationTitle: {
     type: String,
@@ -51,7 +49,9 @@ const props = defineProps({
     default: 1000,
   },
 });
-
+const emit = defineEmits(['update:newConversationTitle']);
+const promptContent = ref('');
+const { promptContentTokenCount } = useTokenCounter(promptContent);
 const {
   newConversationTitle,
   newConversationCheckbox,
@@ -64,11 +64,10 @@ const promptTokenLimit = ref(4096);
 const tokenLimit = 128000;
 const mintokens = 1;
 const rules = [
-  (v) =>
+  () =>
     promptContentTokenCount.value <= promptTokenLimit.value ||
     `max ${promptTokenLimit.value} tokens`,
 ];
-const emit = defineEmits(['update:newConversationTitle']);
 const store = useStore();
 
 function customCounter() {

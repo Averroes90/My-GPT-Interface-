@@ -21,6 +21,7 @@ The project is built using a diverse set of technologies, covering both frontend
   - highlight.js
   - ESlint
   - Prettier
+  - Joi valiadtion
 
 - **Backend:**
 
@@ -42,7 +43,7 @@ The project is built using a diverse set of technologies, covering both frontend
   - Docker
 ## Learning topics covered: 
 
-balancing between functional programming and oop. abstract design patters, factory and adapter patterns, strategy, interface and singleton patterns. syncronous vs asyncronous backend, composition over abstraction, dependency injection principle, liskuv principle,  ripository, unit of work, and transactional decorators  patterns for interacting with the database, DTOs, data mapping layers, Normalizr   
+balancing between functional programming and oop. abstract design patters, factory and adapter patterns, strategy, interface and singleton patterns. syncronous vs asyncronous backend, composition over abstraction, dependency injection principle, liskuv principle,  ripository, unit of work, and transactional decorators  patterns for interacting with the database, DTOs, data mapping layers, Normalizr, centralized scalable datamapping and validation for both JS (noramlizr + Joi) and python (pydatntic + fastapi)    
 
 
 ## AI and Prompt Engineering
