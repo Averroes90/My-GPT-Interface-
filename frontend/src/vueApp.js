@@ -41,7 +41,7 @@ const app = createApp(App);
 
 Sentry.init({
   app,
-  dsn: "https://4a5615461877c6e7b7d76bda57b4e108@o4508321159643136.ingest.us.sentry.io/4508321163378688", // Replace with your actual Sentry DSN
+  dsn: "", // Replace with your actual Sentry DSN
   integrations: [
     new Sentry.browserTracingIntegration({
       tracePropagationTargets: [
@@ -54,7 +54,7 @@ Sentry.init({
     new Sentry.replayIntegration(), // Optional: Include if you want session replay
   ],
   tracesSampleRate: 1.0, // Adjust sample rate for production
-  replaysSessionSampleRate: 0.1, // Adjust for development vs production
+  replaysSessionSampleRate: 0.6, // Adjust for development vs production
   replaysOnErrorSampleRate: 1.0, // Always record sessions with errors
 });
 
