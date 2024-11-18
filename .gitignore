@@ -10,3 +10,6 @@ instance/interactions.db
 interactions.db
 main.pem
 venv
+.env.development
+.env.production
+.env.*

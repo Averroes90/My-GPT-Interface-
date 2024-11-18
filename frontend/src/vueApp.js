@@ -41,11 +41,11 @@ const app = createApp(App);
 
 Sentry.init({
   app,
-  dsn: "", // Replace with your actual Sentry DSN
+  dsn: process.env.VUE_APP_SENTRY_DSN, // Replace with your actual Sentry DSN
   integrations: [
     new Sentry.browserTracingIntegration({
       tracePropagationTargets: [
-        "http://127.0.0.1:5001", // Local backend (proxied via Webpack)
+        process.env.VUE_APP_API_BASE_URL, // Local backend (proxied via Webpack)
         "localhost",             // General local domain for other scenarios
         //"https://api.yourapp.com", // Production backend
         /^\//,                   // Relative paths (if used)
@@ -53,9 +53,9 @@ Sentry.init({
     }),
     new Sentry.replayIntegration(), // Optional: Include if you want session replay
   ],
-  tracesSampleRate: 1.0, // Adjust sample rate for production
-  replaysSessionSampleRate: 0.6, // Adjust for development vs production
-  replaysOnErrorSampleRate: 1.0, // Always record sessions with errors
+  tracesSampleRate: parseFloat(process.env.VUE_APP_TRACING_SAMPLE_RATE), // Adjust sample rate for production
+  replaysSessionSampleRate: parseFloat(process.env.VUE_APP_REPLAY_SESSION_SAMPLE_RATE), // Adjust for development vs production
+  replaysOnErrorSampleRate:parseFloat(process.env.VUE_APP_REPLAYS_ON_ERROR_SAMPLE_RATE), // Always record sessions with errors
 });
 
 
