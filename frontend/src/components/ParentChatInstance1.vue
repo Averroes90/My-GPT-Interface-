@@ -31,13 +31,13 @@ const windowIdRef = ref('WindowMain'); //associated chatwindow
 const newConversationTitle = ref('');
 const newConversationCheckboxState = ref(false);
 
-const modelNameRef = ref('gpt-4-turbo-preview');
+const modelNameRef = ref('gpt-4o');
 
 const updateSelectedInteractions = (newSelectedInteractions) => {
   emit('update:selectedInteractions', newSelectedInteractions);
 };
 
 function handleModelNameUpdated(newModelName) {
-  modelNameRef.value = newModelName;
+modelNameRef.value = newModelName;
 }
 </script>

@@ -9,7 +9,7 @@
         {
             "path": "backend",
             "settings": {
-                "python.pythonPath": "venv/bin/python",
+                "python.defaultInterpreterPath": "venv/bin/python",
                 "python.envFile": ".env",
 				
             },

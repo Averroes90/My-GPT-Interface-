@@ -1,4 +1,6 @@
 // Import the required function from Vue
+import * as Sentry from '@sentry/vue';
+import { Integrations } from '@sentry/tracing';
 import { createApp } from 'vue';
 import { createStore } from 'vuex';
 import { createPinia } from 'pinia';
@@ -36,6 +38,26 @@ const vuetify = createVuetify({
 
 // Create a new Vue app and mount it to an element
 const app = createApp(App);
+
+Sentry.init({
+  app,
+  dsn: "https://4a5615461877c6e7b7d76bda57b4e108@o4508321159643136.ingest.us.sentry.io/4508321163378688", // Replace with your actual Sentry DSN
+  integrations: [
+    new Sentry.browserTracingIntegration({
+      tracePropagationTargets: [
+        "http://127.0.0.1:5001", // Local backend (proxied via Webpack)
+        "localhost",             // General local domain for other scenarios
+        //"https://api.yourapp.com", // Production backend
+        /^\//,                   // Relative paths (if used)
+      ],
+    }),
+    new Sentry.replayIntegration(), // Optional: Include if you want session replay
+  ],
+  tracesSampleRate: 1.0, // Adjust sample rate for production
+  replaysSessionSampleRate: 0.1, // Adjust for development vs production
+  replaysOnErrorSampleRate: 1.0, // Always record sessions with errors
+});
+
 
 //app.config.globalProperties.$delimiters = ['[[', ']]'];
 app.use(vuetify);
